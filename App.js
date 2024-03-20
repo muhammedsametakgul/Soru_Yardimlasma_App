@@ -4,16 +4,12 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BottomTabBar from './components/BottomTopBar'; 
-import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
+import HomeScreen from './screens/HomeScreen';
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Home Screen</Text>
-  </View>
-);
+
 
 
 
