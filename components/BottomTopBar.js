@@ -36,7 +36,7 @@ const BottomTabBar = ({ state, descriptors, navigation }) => {
               style={styles.tabItem}
             >
               <View style={styles.tabItemInner}>
-                <Icon name={icon} size={30} color={isFocused ? '#6C63FF' : '#999'} />
+                <Icon name={icon} size={30} color={isFocused ? '#000000' : '#999'} />
                 {isFocused && <Text style={styles.tabItemText}>{options.title}</Text>}
               </View>
             </TouchableOpacity>
@@ -53,7 +53,7 @@ const BottomTabBar = ({ state, descriptors, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f2f2f2',
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   tabContainer: {
     flexDirection: 'row',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25, 
-    backgroundColor: '#6C63FF',
+    backgroundColor: '#00C8FF',
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
