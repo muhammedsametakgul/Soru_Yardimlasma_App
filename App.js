@@ -3,13 +3,23 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Tabs from "./components/Tabs";
-import { _View } from "react-native";
+import { View } from "react-native";
+import LoginScreen from "./screens/LoginScreen";
 
 const Tab = createBottomTabNavigator();
+const isLoggedIn=false;
+
+
 function App() {
   return (
     <NavigationContainer>
-      <Tabs/>
+      {isLoggedIn ? (
+        <Tabs />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <LoginScreen />
+        </View>
+      )}
     </NavigationContainer>
   );
 }
