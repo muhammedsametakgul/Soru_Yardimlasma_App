@@ -1,14 +1,14 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import Tabs from "./components/Tabs";
-import { View } from "react-native";
 import LoginScreen from "./screens/LoginScreen";
+import SignupScreen from "./screens/SignupScreen";
 
-const Tab = createBottomTabNavigator();
-const isLoggedIn=false;
-
+const Stack = createStackNavigator();
+const isLoggedIn = false;
 
 function App() {
   return (
@@ -16,9 +16,10 @@ function App() {
       {isLoggedIn ? (
         <Tabs />
       ) : (
-        <View style={{ flex: 1 }}>
-          <LoginScreen />
-        </View>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen}  />
+        </Stack.Navigator>
       )}
     </NavigationContainer>
   );
