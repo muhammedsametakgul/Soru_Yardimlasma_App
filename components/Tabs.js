@@ -3,6 +3,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AddScreen from "../screens/AddScren";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,7 +57,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name="Add"
-        component={HomeScreen}
+        component={AddScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View
