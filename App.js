@@ -8,7 +8,7 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
 const Stack = createStackNavigator();
-const isLoggedIn = true;
+const isLoggedIn = false;
 
 function App() {
   return (
