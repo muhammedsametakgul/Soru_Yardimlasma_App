@@ -35,7 +35,7 @@ const AddScreen = () => {
 
 
   const question= async() =>{
-    const doc =addDoc(collection(FIRESTORE_DB,'question'), {title:'Test',question:'Test'})
+    const doc =addDoc(collection(FIRESTORE_DB,'question'), {title:'SametAkgul',question:'SametAkgul'})
   }
 
   return (

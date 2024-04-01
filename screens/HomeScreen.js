@@ -1,23 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, RefreshControl } from 'react-native';
 import ProfileBox from '../components/ProfileBox';
 import { readQuestions } from "../service/readQuestions";
 
 const HomeScreen = () => {
   const [questions, setQuestions] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedQuestions = await readQuestions();
-      setQuestions(fetchedQuestions);
-    };
-
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    const fetchedQuestions = await readQuestions();
+    setQuestions(fetchedQuestions);
+    setRefreshing(false);
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         {questions.map((question, index) => (
           <View key={index} style={styles.profileWrapper}>
             <ProfileBox
