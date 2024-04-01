@@ -11,7 +11,7 @@ import {
 import MultilineTextInput from "../components/TextInput";
 import ImageButton from "../components/ImageButton";
 import { Button } from "react-native-paper";
-import { FIRESTORE_DB } from "../firebaseConfig";
+import { FIRESTORE_DB } from "../config/firebaseConfig";
 import { addDoc, collection } from "@firebase/firestore";
 
 const plus = require("../assets/images/plus.png");
