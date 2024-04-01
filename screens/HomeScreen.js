@@ -1,39 +1,29 @@
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import ProfileBox from '../components/ProfileBox';
+import { readQuestions } from "../service/readQuestions";
 
 const HomeScreen = () => {
-  const profiles = [
-    {
-      name: "User1",
-      description: "Beğendim",
-      imageSource: require('../assets/images/YKS.png'),
-    },
-    {
-      name: "User2",
-      description: "Katılıyorum",
-      imageSource: require('../assets/images/YKS.png'),
-    },
-    {
-      name: "User3",
-      description: "Doğru",
-      imageSource: require('../assets/images/YKS.png'),
-    },
-    {
-      name: "User4",
-      description: "Functionality app",
-      imageSource: require('../assets/images/sürüm1.jpg'),
-    },
-  ];
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedQuestions = await readQuestions();
+      setQuestions(fetchedQuestions);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <SafeAreaView style={styles.screen}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {profiles.map((profile, index) => (
+        {questions.map((question, index) => (
           <View key={index} style={styles.profileWrapper}>
             <ProfileBox
-              name={profile.name}
-              description={profile.description}
-              imageSource={profile.imageSource}
+              name={question.title}
+              description={question.question}
+              imageSource={question.imageSource}
             />
           </View>
         ))}
