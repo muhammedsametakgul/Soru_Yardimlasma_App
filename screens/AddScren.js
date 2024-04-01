@@ -13,6 +13,7 @@ import ImageButton from "../components/ImageButton";
 import { Button } from "react-native-paper";
 import { FIRESTORE_DB } from "../config/firebaseConfig";
 import { addDoc, collection } from "@firebase/firestore";
+import { createQuestion } from "../service/createQuestions";
 
 const plus = require("../assets/images/plus.png");
 const galleryIcon = require("../assets/images/galleryicon.jpg");
@@ -25,17 +26,11 @@ const AddScreen = () => {
   };
 
   const handleAddPress = () => {
-    if (text.trim() === "") {
-      Alert.alert("Uyarı", "Metin girmelisiniz.");
-      return;
-    }
-    console.log("Metin eklendi:", text);
-    setText("");
+   
   };
 
-
   const question= async() =>{
-    const doc =addDoc(collection(FIRESTORE_DB,'question'), {title:'SametAkgul',question:'SametAkgul'})
+    createQuestion("sametak", "sametakk")
   }
 
   return (
