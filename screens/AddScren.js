@@ -11,6 +11,8 @@ import {
 import MultilineTextInput from "../components/TextInput";
 import ImageButton from "../components/ImageButton";
 import { Button } from "react-native-paper";
+import { FIRESTORE_DB } from "../firebaseConfig";
+import { addDoc, collection } from "@firebase/firestore";
 
 const plus = require("../assets/images/plus.png");
 const galleryIcon = require("../assets/images/galleryicon.jpg");
@@ -31,6 +33,11 @@ const AddScreen = () => {
     setText("");
   };
 
+
+  const question= async() =>{
+    const doc =addDoc(collection(FIRESTORE_DB,'question'), {title:'Test',question:'Test'})
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -42,7 +49,7 @@ const AddScreen = () => {
           <ImageButton imageSource={galleryIcon} text={"Gallery"} />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-          <Text style={styles.buttonText}>Soru Ekle</Text>
+          <Text style={styles.buttonText} onPress={() =>question()}>Soru Ekle</Text>
         </TouchableOpacity>
       </View>
 

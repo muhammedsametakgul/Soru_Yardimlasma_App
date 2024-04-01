@@ -8,7 +8,7 @@ import { initializeApp } from 'firebase/app';
 // import {...} from "firebase/storage";
 
 // Initialize Firebase
-const firebaseConfig = {
+/*const firebaseConfig = {
   apiKey: 'api-key',
   authDomain: 'project-id.firebaseapp.com',
   databaseURL: 'https://project-id.firebaseio.com',
@@ -19,5 +19,7 @@ const firebaseConfig = {
   measurementId: 'G-measurement-id',
 };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);*/
+
+
 
