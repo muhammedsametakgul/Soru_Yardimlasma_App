@@ -25,14 +25,14 @@ const LoginScreen = () => {
 
   const handleLogin = () => {
     const auth = getAuth();
-    signInWithEmailAndPassword(FIREBASE_AUTH, "email@gmail.com", "password")
+    signInWithEmailAndPassword(FIREBASE_AUTH,username, password)
       .then((userCredential) => {
        console.log("It's successfully");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
+        console.log(errorMessage)
       });
   };
 
@@ -49,8 +49,8 @@ const LoginScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Email"
-          value={username}
-          onChangeText={setUsername}
+          value={username }
+          onChangeText={username => setUsername(username)}
           autoCorrect={false}
           autoCapitalize="none"
         />
@@ -59,7 +59,7 @@ const LoginScreen = () => {
           placeholder="Şifre"
           secureTextEntry
           value={password}
-          onChangeText={setPassword}
+          onChangeText={password => setPassword(password)}
           autoCorrect={false}
           autoCapitalize="none"
         />
