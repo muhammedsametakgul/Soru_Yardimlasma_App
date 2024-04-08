@@ -11,11 +11,21 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from "./HomeScreen";
 import { useNavigation } from "@react-navigation/native";
+import { signOut } from "firebase/auth"; // Firebase Authentication'dan signOut fonksiyonunu içe aktarın
+import { auth } from "../config/firebaseConfig"; // Firebase yapılandırma dosyanızdan auth nesnesini içe aktarın
 
 
+const handleSignOut = async () => {
+  try {
+      await signOut(auth); // Firebase Authentication'dan oturumu kapat
+      // Oturumu kapattıktan sonra kullanıcıyı giriş ekranına yönlendirin
+  } catch (error) {
+      console.error('Oturum kapatma hatası:', error);
+  }
+};
 
 const ProfileScreen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,7 +88,7 @@ const ProfileScreen = () => {
             <Text style={styles.menuItemText}>Destek Ol</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={handleSignOut}>
           <View style={styles.menuItem}>
             <Icon name="account-circle" color="#FF6347" size={25}/>
             <Text style={styles.menuItemText}>Ayarlar</Text>

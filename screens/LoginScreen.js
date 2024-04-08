@@ -14,9 +14,8 @@ import {
 import { Colors } from "../utils/Colors";
 const google = require("../assets/images/google.png");
 import { useNavigation } from "@react-navigation/native";
-import { FIREBASE_AUTH } from "../config/firebaseConfig";
+import { auth} from "../config/firebaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -24,15 +23,13 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleLogin = () => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(FIREBASE_AUTH,username, password)
+    signInWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
-       console.log("It's successfully");
+        console.log("Başarıyla giriş yapıldı");
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage)
+        Alert.alert(errorMessage);
       });
   };
 

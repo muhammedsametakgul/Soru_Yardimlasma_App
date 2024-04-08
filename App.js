@@ -1,27 +1,44 @@
-import React, { useState } from "react";
+// App.js
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import Tabs from "./components/Tabs";
 import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
 
 const Stack = createStackNavigator();
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      if (initializing) setInitializing(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (initializing) return null;
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? (
-        <Tabs />
-      ) : (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
-        </Stack.Navigator>
-      )}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {user ? (
+          <Stack.Screen name="Main" component={Tabs} />
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: "Giriş Yap" }}
+          />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
