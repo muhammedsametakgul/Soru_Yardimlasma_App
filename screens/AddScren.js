@@ -8,7 +8,6 @@ import {
   Text,
   Alert,
 } from "react-native";
-import MultilineTextInput from "../components/TextInput";
 import ImageButton from "../components/ImageButton";
 import { Button } from "react-native-paper";
 import { FIRESTORE_DB } from "../config/firebaseConfig";
@@ -26,29 +25,36 @@ const AddScreen = () => {
   };
 
   const handleAddPress = () => {
-   
+    console.log(text);
   };
 
-  const question= async() =>{
-    createQuestion("sametak", "sametakk")
-  }
+  const question = async () => {
+    createQuestion("sametak", "sametakk");
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <MultilineTextInput value={text} onChangeText={setText} />
+        <TextInput
+          style={styles.input}
+          multiline={true}
+          onChangeText={(newText) => setText(newText)}
+          value={text}
+          placeholder="Sorunuzu giriniz"
+          placeholderTextColor="gray"
+        />
       </View>
-     
+
       <View style={styles.buttonContainer}>
         <View style={styles.buttonFrame}>
           <ImageButton imageSource={galleryIcon} text={"Gallery"} />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-          <Text style={styles.buttonText} onPress={() =>question()}>Soru Ekle</Text>
+          <Text style={styles.buttonText} onPress={handleAddPress}>
+            Soru Ekle
+          </Text>
         </TouchableOpacity>
       </View>
-
-     
     </View>
   );
 };
@@ -60,9 +66,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   inputContainer: {
-    marginTop: "10%",
-    alignItems: "center",
-    width: "100%",
+    padding: 10,
+    backgroundColor: "#fff",
+    width: "98%",
   },
   galleryButton: {
     marginTop: "2%",
@@ -86,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "gray",
     marginBottom: 20,
-    padding : 10
+    padding: 10,
   },
   buttonText: {
     color: "#fff",
@@ -97,9 +103,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#000',
-    marginTop : '10%',
-    width : '60%'
+    backgroundColor: "#000",
+    marginTop: "10%",
+    width: "60%",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 15,
+    padding: 10,
+    fontSize: 16,
+    minHeight: 250,
+    textAlign: "left",
+    textAlignVertical: "top",
   },
 });
 
