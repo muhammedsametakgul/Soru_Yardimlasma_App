@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -9,20 +9,50 @@ import {
   Alert,
 } from "react-native";
 import ImageButton from "../components/ImageButton";
-import { Button } from "react-native-paper";
-import { FIRESTORE_DB } from "../config/firebaseConfig";
-import { addDoc, collection } from "@firebase/firestore";
+import * as ImagePicker from 'expo-image-picker' 
+
 import { createQuestion } from "../service/createQuestions";
 
-const plus = require("../assets/images/plus.png");
+
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 
 const AddScreen = () => {
   const [text, setText] = useState("");
+  const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
+  const [image, setImage] = useState(null);
 
-  const openGallery = () => {
-    console.log("Galeri açıldı");
+
+  useEffect(() =>{
+    (async() =>{
+      const galleryStatus= await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setGalleryPermissions(galleryStatus.status === 'granted');
+
+    })();
+  },[])
+
+
+  const pickImage= async () =>{
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect:[4,3],
+      quality:1
+    });
+
+    console.log(result)
+
+    if(!result.canceled){
+      setImage(result.uri)
+    }
   };
+
+  if(hasGalleryPermissions ===false)  {
+    alert("Erişim Yok");
+  };
+
+ 
+  
+  
 
   const handleAddPress = () => {
     console.log(text);
@@ -48,7 +78,7 @@ const AddScreen = () => {
 
       <View style={styles.buttonContainer}>
         <View style={styles.buttonFrame}>
-          <ImageButton imageSource={galleryIcon} text={"Gallery"} />
+          <ImageButton imageSource={galleryIcon} text={"Gallery"}  onPress={() =>pickImage()}/>
         </View>
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
           <Text style={styles.buttonText} onPress={handleAddPress}>
