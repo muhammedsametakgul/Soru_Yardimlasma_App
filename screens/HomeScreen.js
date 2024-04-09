@@ -38,7 +38,7 @@ const HomeScreen = () => {
             <ProfileBox
               name={question.title}
               description={question.question}
-              imageSource={question.imageSource}
+              imageSource={{ uri: question.imageUrl }} 
             />
           </View>
         ))}
