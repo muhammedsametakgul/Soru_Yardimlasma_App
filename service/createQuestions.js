@@ -7,6 +7,6 @@ export const createQuestion = async (title, questionText) => {
     return addedQuestion
   } catch (error) {
     console.error("Error adding document: ", error);
-    throw error; // throw the error for handling in the component
+    throw error; 
   }
 };

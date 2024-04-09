@@ -26,10 +26,11 @@ const AddScreen = () => {
 
   const handleAddPress = () => {
     console.log(text);
+    question();
   };
 
   const question = async () => {
-    createQuestion("sametak", "sametakk");
+    createQuestion("sametak", text);
   };
 
   return (
@@ -38,7 +39,7 @@ const AddScreen = () => {
         <TextInput
           style={styles.input}
           multiline={true}
-          onChangeText={(newText) => setText(newText)}
+          onChangeText={(text) => setText(text)}
           value={text}
           placeholder="Sorunuzu giriniz"
           placeholderTextColor="gray"
