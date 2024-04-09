@@ -9,10 +9,11 @@ import {
   Alert,
 } from "react-native";
 import ImageButton from "../components/ImageButton";
-import * as ImagePicker from 'expo-image-picker' 
+import * as ImagePicker from "expo-image-picker";
 
-import { createQuestion } from "../service/createQuestions";
-
+import {
+  uploadImageAndCreateQuestion
+} from "../service/createQuestions";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 
@@ -21,46 +22,40 @@ const AddScreen = () => {
   const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
 
-
-  useEffect(() =>{
-    (async() =>{
-      const galleryStatus= await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setGalleryPermissions(galleryStatus.status === 'granted');
-
+  useEffect(() => {
+    (async () => {
+      const galleryStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setGalleryPermissions(galleryStatus.status === "granted");
     })();
-  },[])
+  }, []);
 
-
-  const pickImage= async () =>{
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes:ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect:[4,3],
-      quality:1
+      aspect: [4, 3],
+      quality: 1,
     });
 
-    console.log(result)
+    console.log(result.assets[0].uri);
 
-    if(!result.canceled){
-      setImage(result.uri)
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
     }
   };
 
-  if(hasGalleryPermissions ===false)  {
+  if (hasGalleryPermissions === false) {
     alert("Erişim Yok");
-  };
-
- 
-  
-  
+  }
 
   const handleAddPress = () => {
-    console.log(text);
+    //console.log(text);
     question();
   };
 
   const question = async () => {
-    createQuestion("sametak", text);
+         uploadImageAndCreateQuestion("sametak",text, image)
   };
 
   return (
@@ -78,7 +73,11 @@ const AddScreen = () => {
 
       <View style={styles.buttonContainer}>
         <View style={styles.buttonFrame}>
-          <ImageButton imageSource={galleryIcon} text={"Gallery"}  onPress={() =>pickImage()}/>
+          <ImageButton
+            imageSource={galleryIcon}
+            text={"Gallery"}
+            onPress={() => pickImage()}
+          />
         </View>
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
           <Text style={styles.buttonText} onPress={handleAddPress}>
