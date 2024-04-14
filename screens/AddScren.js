@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import ImageButton from "../components/ImageButton";
 import * as ImagePicker from "expo-image-picker";
@@ -16,11 +17,13 @@ import {
 } from "../service/createQuestions";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
+const deleteIcon = require("../assets/images/delete.png");
 
 const AddScreen = () => {
   const [text, setText] = useState("");
   const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -34,28 +37,35 @@ const AddScreen = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
-
+  
     console.log(result.assets[0].uri);
-
-    if (!result.canceled) {
+  
+    if (!result.cancelled) {
       setImage(result.assets[0].uri);
     }
+  };
+  
+
+  const deleteImage = () => {
+    setImage(null);
   };
 
   if (hasGalleryPermissions === false) {
     alert("Erişim Yok");
   }
 
-  const handleAddPress = () => {
-    //console.log(text);
-    question();
+  const handleAddPress = async () => {
+    setIsLoading(true);
+    await question();
+    setIsLoading(false);
   };
 
   const question = async () => {
-         uploadImageAndCreateQuestion("sametak",text, image)
+    await uploadImageAndCreateQuestion("sametak",text, image);
+    setText("");
+    setImage(null);
   };
 
   return (
@@ -71,20 +81,28 @@ const AddScreen = () => {
         />
       </View>
 
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonFrame}>
-          <ImageButton
-            imageSource={galleryIcon}
-            text={"Gallery"}
-            onPress={() => pickImage()}
-          />
+      <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
+        <Image source={galleryIcon} style={styles.icon} />
+      </TouchableOpacity>
+
+      {image && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: image }} style={styles.image} />
+          <TouchableOpacity style={styles.deleteButton} onPress={deleteImage}>
+            <Image source={deleteIcon} style={styles.deleteIcon} />
+          </TouchableOpacity>
         </View>
+      )}
+
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-          <Text style={styles.buttonText} onPress={handleAddPress}>
-            Soru Ekle
-          </Text>
+          <Text style={styles.buttonText}>Soru Ekle</Text>
         </TouchableOpacity>
-      </View>
+      )}
     </View>
   );
 };
@@ -102,31 +120,16 @@ const styles = StyleSheet.create({
   },
   galleryButton: {
     marginTop: "2%",
-    backgroundColor: "green",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
     width: "50%",
-    textAlign: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  buttonContainer: {
     alignItems: "center",
-    marginTop: "10%",
+    backgroundColor: "green",
   },
-  buttonFrame: {
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: "gray",
-    marginBottom: 20,
-    padding: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
+  icon: {
+    width: 24,
+    height: 24,
   },
   button: {
     backgroundColor: "blue",
@@ -137,6 +140,10 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     width: "60%",
   },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -146,6 +153,31 @@ const styles = StyleSheet.create({
     minHeight: 250,
     textAlign: "left",
     textAlignVertical: "top",
+  },
+  imageContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    position: "relative",
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: "cover",
+    borderRadius: 10,
+  },
+  deleteButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+  },
+  deleteIcon: {
+    width: 20,
+    height: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
