@@ -6,7 +6,7 @@ import { readQuestions } from "../service/readQuestions";
 const HomeScreen = () => {
   const [questions, setQuestions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(true); // Yeni state ekledik: loading
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     fetchData();
@@ -18,9 +18,9 @@ const HomeScreen = () => {
       setQuestions(fetchedQuestions);
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Hata durumunda gerekirse kullanıcıya bir mesaj gösterebilirsiniz
+     
     } finally {
-      setLoading(false); // Veri yüklendikten sonra loading durumunu false olarak ayarlayın
+      setLoading(false); 
       setRefreshing(false);
     }
   };
@@ -32,7 +32,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      {loading ? ( // loading durumuna göre ActivityIndicator veya içeriği görüntüle
+      {loading ? ( 
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>

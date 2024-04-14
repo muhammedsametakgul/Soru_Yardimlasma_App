@@ -15,6 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import {
   uploadImageAndCreateQuestion
 } from "../service/createQuestions";
+import GetUserEmail from "../service/GetUserEmail";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
@@ -24,6 +25,7 @@ const AddScreen = () => {
   const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const userEmail = GetUserEmail(); 
 
   useEffect(() => {
     (async () => {
@@ -39,14 +41,13 @@ const AddScreen = () => {
       allowsEditing: true,
       quality: 1,
     });
-  
+
     console.log(result.assets[0].uri);
-  
+
     if (!result.cancelled) {
       setImage(result.assets[0].uri);
     }
   };
-  
 
   const deleteImage = () => {
     setImage(null);
@@ -63,7 +64,7 @@ const AddScreen = () => {
   };
 
   const question = async () => {
-    await uploadImageAndCreateQuestion("sametak",text, image);
+    await uploadImageAndCreateQuestion(userEmail,text, image);
     setText("");
     setImage(null);
   };
