@@ -17,15 +17,18 @@ export const createQuestion = async (title, questionText) => {
 
 export const uploadImageAndCreateQuestion = async (title, questionText, imageUri) => {
   try {
-    const imageUrl = await uploadImageToStorage(imageUri);    
-    const timestamp = serverTimestamp(); 
+    let imageUrl = null;
+    if (imageUri) {
+      imageUrl = await uploadImageToStorage(imageUri);
+    }
+
+    const timestamp = serverTimestamp();
 
     const addedQuestionRef = await addDoc(collection(FIRESTORE_DB, 'questions'), {
       title: title,
       question: questionText,
       imageUrl: imageUrl,
       createdAt: timestamp
-
     });
 
     const addedQuestionId = addedQuestionRef.id;
@@ -37,7 +40,6 @@ export const uploadImageAndCreateQuestion = async (title, questionText, imageUri
     throw error;
   }
 };
-
 
 //To get image URL, we need to add it to Firebase Storage ( Msametakgul)
 export const uploadImageToStorage = async (localUri) => {

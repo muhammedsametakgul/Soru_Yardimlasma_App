@@ -1,53 +1,117 @@
-import { View, Text,StyleSheet, Image } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 
-const ProfileBox = ({ name, description, imageSource }) => (
+const ProfileBox = ({ name, description, imageSource }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const handleImagePress = () => {
+    setModalVisible(true);
+  };
+
+  return (
     <View style={styles.container}>
       <View style={styles.profileHeader}>
         <Text style={styles.profileName}>{name}</Text>
         <View style={styles.separator}></View>
       </View>
       <Text style={styles.description}>{description}</Text>
-      <Image source={imageSource} style={styles.image} />
+      {imageSource && imageSource.uri !== null ? (
+        <TouchableOpacity onPress={handleImagePress}>
+          <Image source={imageSource} style={styles.image} />
+        </TouchableOpacity>
+      ) : null}
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        onRequestClose={() => setModalVisible(false)} 
+      >
+        <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.modalCloseButton}
+            onPress={() => setModalVisible(false)}
+            activeOpacity={0.5} 
+          >
+            <Text style={styles.modalCloseText}>X</Text>
+          </TouchableOpacity>
+          {imageSource && ( 
+            <Image
+              source={imageSource}
+              style={styles.modalImage}
+              resizeMode="contain"
+            />
+          )}
+        </View>
+      </Modal>
     </View>
   );
+};
 
-  export default ProfileBox;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    marginVertical: 8,
+    borderRadius: 10,
+    elevation: 3,
+    shadowColor: "#000000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+  },
+  profileHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  profileName: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginRight: 10,
+  },
+  separator: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#CCCCCC",
+  },
+  description: {
+    marginVertical: 10,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalCloseButton: {
+    position: "absolute",
+    top: 30,
+    right: 20,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 5,
+  },
+  modalCloseText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  modalImage: {
+    width: "90%",
+    height: "90%",
+    borderRadius: 10,
+  },
+});
 
-  const styles = StyleSheet.create({
-   
-    container: {
-        flex: 1, //Bu uygulanarak bizim sayfamızda %80 width uygulanabiliyor
-      width: "90%",
-      backgroundColor: '#FFFFFF',
-      padding: 20,
-      marginVertical: 10,
-      borderRadius: 10,
-      elevation: 3,
-      shadowColor: '#000000', 
-      shadowOpacity: 0.3, 
-      shadowOffset: { width: 0, height: 2 },
-    },
-    profileHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    profileName: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginRight: 10,
-    },
-    separator: {
-      flex: 1,
-      height: 1,
-      backgroundColor: '#CCCCCC',
-    },
-    description: {
-      marginVertical: 10,
-    },
-    image: {
-      width: 200,
-      height: 200,
-      borderRadius: 10,
-    },
-  });
-  
+export default ProfileBox;
