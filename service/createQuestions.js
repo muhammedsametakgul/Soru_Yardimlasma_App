@@ -1,4 +1,4 @@
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection,serverTimestamp } from 'firebase/firestore';
 import { FIRESTORE_DB, STORAGE } from "../config/firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 
@@ -18,11 +18,14 @@ export const createQuestion = async (title, questionText) => {
 export const uploadImageAndCreateQuestion = async (title, questionText, imageUri) => {
   try {
     const imageUrl = await uploadImageToStorage(imageUri);    
+    const timestamp = serverTimestamp(); 
 
     const addedQuestionRef = await addDoc(collection(FIRESTORE_DB, 'questions'), {
       title: title,
       question: questionText,
-      imageUrl: imageUrl
+      imageUrl: imageUrl,
+      createdAt: timestamp
+
     });
 
     const addedQuestionId = addedQuestionRef.id;
