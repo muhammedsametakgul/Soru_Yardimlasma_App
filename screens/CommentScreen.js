@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView, RefreshControl, ActivityIndicator, TextInput, TouchableOpacity, Image, Text } from 'react-native';
 import CommentBox from '../components/CommentBox';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { createComment } from '../service/CreateComments';
 
 const CommentScreen = () => {
   const [questions, setQuestions] = useState([]);
@@ -48,8 +49,16 @@ const CommentScreen = () => {
     console.log('Add Image');
   };
 
-  const handleCommentSubmit = () => {
+  const handleCommentSubmit = async () => {
     console.log('Submit Comment:', commentText);
+    try {
+        const addedCommentRef = await createComment('2o0UvBvMV0AmZrq4xaOK', commentText, null); 
+        console.log("Added comment:", addedCommentRef);
+        
+        setCommentText('');
+      } catch (error) {
+        console.error("Error creating comment:", error);
+      }
   };
 
   return (
@@ -79,8 +88,7 @@ const CommentScreen = () => {
               <TextInput
                 style={styles.commentInput}
                 placeholder="Yorumunuzu buraya yazın..."
-                onChangeText={setCommentText}
-                value={commentText}
+                onChangeText={(commentText) => setCommentText(commentText)}
                 multiline={true}
                 numberOfLines={4} 
                 textAlignVertical="top"
