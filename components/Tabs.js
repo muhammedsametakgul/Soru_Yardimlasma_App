@@ -99,7 +99,7 @@ const Tabs = () => {
                 style={{ width: 25, height: 25 }}
               />
               <Text style={{ color: focused ? "#000000" : "#000333" }}>
-                Anasayfa
+                Ayarlar
               </Text>
             </View>
           ),
