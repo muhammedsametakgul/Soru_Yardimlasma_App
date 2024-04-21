@@ -9,18 +9,21 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Image,
 } from "react-native";
 import CommentBox from "../components/CommentBox";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { createComment } from "../service/CreateComments";
 import { getCommentsForQuestion } from "../service/GetComments";
 import { useRoute } from '@react-navigation/native';
+import * as ImagePicker from "expo-image-picker";
 
 const CommentScreen = () => {
   const [comments, setComments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const route = useRoute();
 
   useEffect(() => {
@@ -28,13 +31,11 @@ const CommentScreen = () => {
   }, []);
 
   const fetchData = async () => {
-    console.log(route.params)
     const questionId = route.params.questionId;
 
     try {
       const commentsData = await getCommentsForQuestion(questionId);
       setComments(commentsData);
-      console.log("Comment : ", commentsData);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -48,8 +49,28 @@ const CommentScreen = () => {
     fetchData();
   };
 
-  const handleAddImage = () => {
-    console.log("Add Image");
+  const pickImage = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    
+    if (permissionResult.granted === false) {
+      alert("Galeriye erişim izni gerekiyor!");
+      return;
+    }
+  
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+  
+    
+    if (!result.cancelled) {
+      setSelectedImage(result.assets[0].uri); 
+    }
+  };
+  const handleAddImage = async () => {
+    pickImage(); 
+    console.log("Selected Image URL:", result.assets[0].uri); 
   };
 
   const handleCommentSubmit = async () => {
@@ -58,12 +79,12 @@ const CommentScreen = () => {
       const addedCommentRef = await createComment(
         "2o0UvBvMV0AmZrq4xaOK",
         commentText,
-        "https://firebasestorage.googleapis.com/v0/b/yksapp-e87a5.appspot.com/o/images%2F1712686567061.jpg?alt=media&token=54766b0f-9198-4589-8b4d-aec5d820dade"
+        selectedImage 
       );
-      console.log("Added comment:", addedCommentRef);
 
+      setSelectedImage(null);
       setCommentText("");
-    } catch (error) {
+        } catch (error) {
       console.error("Error creating comment:", error);
     }
   };
@@ -114,6 +135,9 @@ const CommentScreen = () => {
               >
                 <Icon name="camera" size={20} color="#FFFFFF" />
               </TouchableOpacity>
+              {selectedImage && (
+                <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
+              )}
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={handleCommentSubmit}
@@ -181,6 +205,11 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
+  },
+  selectedImage: {
+    width: 50,
+    height: 50,
+    marginLeft: 10,
   },
 });
 
