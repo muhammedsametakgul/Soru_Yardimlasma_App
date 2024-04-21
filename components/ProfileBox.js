@@ -10,7 +10,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
 
-const ProfileBox = ({ name, description, imageSource }) => {
+const ProfileBox = ({ name, description, imageSource, questionId }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -19,7 +19,7 @@ const ProfileBox = ({ name, description, imageSource }) => {
   };
 
   const handleCommentsPress = () => {
-    navigation.navigate('Comment');
+    navigation.navigate('Comment', { questionId }); // questionId'yi CommentScreen'e iletiyoruz
   };
 
   return (
@@ -41,17 +41,17 @@ const ProfileBox = ({ name, description, imageSource }) => {
       <Modal
         visible={modalVisible}
         transparent={true}
-        onRequestClose={() => setModalVisible(false)} 
+        onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalContainer}>
           <TouchableOpacity
             style={styles.modalCloseButton}
             onPress={() => setModalVisible(false)}
-            activeOpacity={0.5} 
+            activeOpacity={0.5}
           >
             <Text style={styles.modalCloseText}>X</Text>
           </TouchableOpacity>
-          {imageSource && ( 
+          {imageSource && (
             <Image
               source={imageSource}
               style={styles.modalImage}

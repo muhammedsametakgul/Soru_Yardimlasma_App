@@ -14,20 +14,22 @@ import CommentBox from "../components/CommentBox";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { createComment } from "../service/CreateComments";
 import { getCommentsForQuestion } from "../service/GetComments";
+import { useRoute } from '@react-navigation/native';
 
 const CommentScreen = () => {
   const [comments, setComments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
+  const route = useRoute();
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const questionId = "2o0UvBvMV0AmZrq4xaOK";
-    
+    console.log(route.params)
+    const questionId = route.params.questionId;
 
     try {
       const commentsData = await getCommentsForQuestion(questionId);
@@ -56,7 +58,7 @@ const CommentScreen = () => {
       const addedCommentRef = await createComment(
         "2o0UvBvMV0AmZrq4xaOK",
         commentText,
-        null
+        "https://firebasestorage.googleapis.com/v0/b/yksapp-e87a5.appspot.com/o/images%2F1712686567061.jpg?alt=media&token=54766b0f-9198-4589-8b4d-aec5d820dade"
       );
       console.log("Added comment:", addedCommentRef);
 
