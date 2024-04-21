@@ -10,16 +10,12 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
 
-const ProfileBox = ({ name, description, imageSource }) => {
+const CommentBox = ({ name, description, imageSource }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleImagePress = () => {
     setModalVisible(true);
-  };
-
-  const handleCommentsPress = () => {
-    navigation.navigate('Comment');
   };
 
   return (
@@ -34,10 +30,6 @@ const ProfileBox = ({ name, description, imageSource }) => {
           <Image source={imageSource} style={styles.image} />
         </TouchableOpacity>
       ) : null}
-      <TouchableOpacity style={styles.commentsButton} onPress={handleCommentsPress}>
-        <Icon name="comment" size={20} color="#FFFFFF" />
-        <Text style={styles.commentsButtonText}>Yorumlara Git</Text>
-      </TouchableOpacity>
       <Modal
         visible={modalVisible}
         transparent={true}
@@ -101,20 +93,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#CCCCCC",
   },
-  commentsButton: {
-    flexDirection: "row", 
-    alignSelf: "flex-start",
-    marginTop: 10,
-    padding: 8,
-    backgroundColor: "#007AFF",
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  commentsButtonText: {
-    color: "#FFF",
-    fontWeight: "bold",
-    marginLeft: 5, 
-  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -140,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileBox;
+export default CommentBox;
