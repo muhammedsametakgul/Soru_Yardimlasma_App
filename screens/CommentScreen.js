@@ -1,40 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, SafeAreaView, RefreshControl, ActivityIndicator, TextInput, TouchableOpacity, Image, Text } from 'react-native';
-import CommentBox from '../components/CommentBox';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { createComment } from '../service/CreateComments';
+import { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  RefreshControl,
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  Text,
+} from "react-native";
+import CommentBox from "../components/CommentBox";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { createComment } from "../service/CreateComments";
+import { getCommentsForQuestion } from "../service/GetComments";
 
 const CommentScreen = () => {
-  const [questions, setQuestions] = useState([]);
+  const [comments, setComments] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [commentText, setCommentText] = useState('');
-  const [imageSource, setImageSource] = useState(null);
+  const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const fakeQuestions = [
-      {
-        title: 'Question 1',
-        question: 'Description 1',
-        imageUrl: 'https://via.placeholder.com/200',
-      },
-      {
-        title: 'Question 2',
-        question: 'Description 2',
-        imageUrl: 'https://via.placeholder.com/200',
-      },
-      {
-        title: 'Question 3',
-        question: 'Description 3',
-        imageUrl: 'https://via.placeholder.com/200',
-      },
-    ];
+    const questionId = "2o0UvBvMV0AmZrq4xaOK";
+    
 
-    setQuestions(fakeQuestions);
+    try {
+      const commentsData = await getCommentsForQuestion(questionId);
+      setComments(commentsData);
+      console.log("Comment : ", commentsData);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
 
     setLoading(false);
     setRefreshing(false);
@@ -46,19 +47,23 @@ const CommentScreen = () => {
   };
 
   const handleAddImage = () => {
-    console.log('Add Image');
+    console.log("Add Image");
   };
 
   const handleCommentSubmit = async () => {
-    console.log('Submit Comment:', commentText);
+    console.log("Submit Comment:", commentText);
     try {
-        const addedCommentRef = await createComment('2o0UvBvMV0AmZrq4xaOK', commentText, null); 
-        console.log("Added comment:", addedCommentRef);
-        
-        setCommentText('');
-      } catch (error) {
-        console.error("Error creating comment:", error);
-      }
+      const addedCommentRef = await createComment(
+        "2o0UvBvMV0AmZrq4xaOK",
+        commentText,
+        null
+      );
+      console.log("Added comment:", addedCommentRef);
+
+      setCommentText("");
+    } catch (error) {
+      console.error("Error creating comment:", error);
+    }
   };
 
   return (
@@ -71,17 +76,25 @@ const CommentScreen = () => {
         <View style={{ flex: 1 }}>
           <ScrollView
             contentContainerStyle={styles.contentContainer}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           >
-            {questions.map((question, index) => (
-              <View key={index} style={styles.profileWrapper}>
-                <CommentBox
-                  name={question.title}
-                  description={question.question}
-                  imageSource={{ uri: question.imageUrl }}
-                />
+            {comments.length === 0 ? (
+              <View style={styles.noCommentsContainer}>
+                <Text style={styles.noCommentsText}>Yorum Yok</Text>
               </View>
-            ))}
+            ) : (
+              comments.map((comment, index) => (
+                <View key={index} style={styles.profileWrapper}>
+                  <CommentBox
+                    name={comment.userEmail}
+                    description={comment.comment}
+                    imageSource={{ uri: comment.imageUrl }}
+                  />
+                </View>
+              ))
+            )}
           </ScrollView>
           <View style={styles.fixedBottom}>
             <View style={styles.commentContainer}>
@@ -90,13 +103,19 @@ const CommentScreen = () => {
                 placeholder="Yorumunuzu buraya yazın..."
                 onChangeText={(commentText) => setCommentText(commentText)}
                 multiline={true}
-                numberOfLines={4} 
+                numberOfLines={4}
                 textAlignVertical="top"
               />
-              <TouchableOpacity style={styles.addImageButton} onPress={handleAddImage}>
+              <TouchableOpacity
+                style={styles.addImageButton}
+                onPress={handleAddImage}
+              >
                 <Icon name="camera" size={20} color="#FFFFFF" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.submitButton} onPress={handleCommentSubmit}>
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={handleCommentSubmit}
+              >
                 <Text style={styles.submitButtonText}>Gönder</Text>
               </TouchableOpacity>
             </View>
@@ -110,56 +129,56 @@ const CommentScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop :50
+    marginTop: 50,
   },
   contentContainer: {
-    paddingBottom: 150, 
+    paddingBottom: 150,
   },
   profileWrapper: {
-    alignItems: 'center',
+    alignItems: "center",
     margin: 10,
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   fixedBottom: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
   },
   commentContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     borderTopWidth: 1,
-    borderTopColor: '#CCCCCC',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: "#CCCCCC",
+    backgroundColor: "#FFFFFF",
   },
   commentInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#CCCCCC',
+    borderColor: "#CCCCCC",
     borderRadius: 5,
     padding: 8,
     marginRight: 10,
-    maxHeight: 120, 
+    maxHeight: 120,
   },
   addImageButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     borderRadius: 5,
     padding: 10,
   },
   submitButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     borderRadius: 5,
     padding: 10,
   },
   submitButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 });
 

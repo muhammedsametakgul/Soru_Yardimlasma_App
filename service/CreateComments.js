@@ -55,14 +55,4 @@ export const uploadImageToStorage = async (localUri) => {
   }
 };
 
-export const getCommentsForQuestion = async (questionId) => {
-  try {
-    const commentsQuery = query(collection(FIRESTORE_DB, `questions/${questionId}/comments`));
-    const querySnapshot = await getDocs(commentsQuery);
-    const comments = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return comments;
-  } catch (error) {
-    console.error("Error getting comments for question:", error);
-    throw error;
-  }
-};
+
