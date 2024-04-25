@@ -1,7 +1,13 @@
-// ProfileScreen.js
-
-import React from "react";
-import { View, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Modal,
+  TextInput,
+  Button,
+} from "react-native";
 import {
   Avatar,
   Title,
@@ -10,26 +16,55 @@ import {
   TouchableRipple,
 } from "react-native-paper";
 
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import HomeScreen from "./HomeScreen";
 import { useNavigation } from "@react-navigation/native";
-import { signOut } from "firebase/auth";
+import {
+  signOut,
+  updateProfile,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth"; 
 import { auth } from "../config/firebaseConfig";
-
-const handleSignOut = async () => {
-  try {
-      await signOut(auth);
-  } catch (error) {
-      console.error('Oturum kapatma hatası:', error);
-  }
-};
+import { sendEmailVerification } from "firebase/auth";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
 
-  // Kullanıcı adı ve e-postayı al
-  const username = auth.currentUser.displayName;
-  const email = auth.currentUser.email;
+  const [username, setUsername] = useState(auth.currentUser.displayName);
+  const [email, setEmail] = useState(auth.currentUser.email);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newUsername, setNewUserName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Oturum kapatma hatası:", error);
+    }
+  };
+
+  const navigateToChangePassword = () => {
+    navigation.navigate('ChangePassword'); 
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      if (newUsername !== auth.currentUser.displayName) {
+        await updateProfile(auth.currentUser, { displayName: newUsername });
+        setUsername(newUsername); 
+        setNewUserName(""); 
+
+        await auth.currentUser.reload();
+
+      }
+     
+    } catch (error) {
+      console.error("Bilgileri güncelleme hatası:", error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +77,6 @@ const ProfileScreen = () => {
             size={80}
           />
           <View style={{ marginLeft: 10 }}>
-            {/* Kullanıcı adını ve e-postayı göster */}
             <Title
               style={[
                 styles.title,
@@ -56,57 +90,100 @@ const ProfileScreen = () => {
             </Title>
             <Caption style={styles.caption}>{email}</Caption>
           </View>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Icon
+              name="pencil"
+              color="#777777"
+              size={20}
+              style={{ marginLeft: 10, marginTop: 20 }}
+            />
+          </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.infoBoxWrapper}>
-          <View style={[styles.infoBox, {
-            borderRightColor: '#dddddd',
-            borderRightWidth: 1
-          }]}>
-            <Title>3</Title>
-            <Caption>Sorulan Soru Sayısı</Caption>
-          </View>
-          <View style={styles.infoBox}>
-            <Title>12</Title>
-            <Caption>Çözülen Soru Sayısı</Caption>
-          </View>
+        <View
+          style={[
+            styles.infoBox,
+            {
+              borderRightColor: "#dddddd",
+              borderRightWidth: 1,
+            },
+          ]}
+        >
+          <Title>3</Title>
+          <Caption>Sorulan Soru Sayısı</Caption>
+        </View>
+        <View style={styles.infoBox}>
+          <Title>12</Title>
+          <Caption>Çözülen Soru Sayısı</Caption>
+        </View>
       </View>
 
       <View style={styles.menuWrapper}>
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
-            <Icon name="bookmark" color="#FF6347" size={25}/>
+            <Icon name="bookmark" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Kaydedilen Sorular</Text>
           </View>
         </TouchableRipple>
-        
+
         <TouchableRipple onPress={HomeScreen}>
           <View style={styles.menuItem}>
-            <Icon name="share-outline" color="#FF6347" size={25}/>
+            <Icon name="share-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Arkadaşlarınla Paylaş</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
-            <Icon name="account-check-outline" color="#FF6347" size={25}/>
+            <Icon name="account-check-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Destek Ol</Text>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple onPress={() => {navigateToChangePassword()}}>
+          <View style={styles.menuItem}>
+            <Icon name="account-details" color="#FF6347" size={25} />
+            <Text style={styles.menuItemText}>Şifre Değiştir</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={handleSignOut}>
           <View style={styles.menuItem}>
-            <Icon name="account-circle" color="#FF6347" size={25}/>
+            <Icon name="account-circle" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Ayarlar</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={styles.menuItem}>
-            <Icon name="account-details" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}>Profili Düzenle</Text>
-          </View>
-        </TouchableRipple>
+      
       </View>
 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Bilgileri Düzenle</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Kullanıcı Adı"
+              onChangeText={(text) => setNewUserName(text)}
+              value={newUsername} 
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Yeni E-posta"
+              onChangeText={(text) => setNewEmail(text)}
+              value={newEmail} 
+            />
+          
+            <Button title="Kaydet" onPress={handleSaveChanges} />
+            <Button title="İptal" onPress={() => setModalVisible(false)} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -159,6 +236,30 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
   },
 });
 
