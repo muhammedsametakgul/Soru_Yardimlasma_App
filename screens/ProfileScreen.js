@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   Button,
+  Alert,
 } from "react-native";
 import {
   Avatar,
@@ -24,9 +25,9 @@ import {
   updateProfile,
   updateEmail,
   updatePassword,
+  sendEmailVerification,
 } from "firebase/auth"; 
 import { auth } from "../config/firebaseConfig";
-import { sendEmailVerification } from "firebase/auth";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -52,17 +53,41 @@ const ProfileScreen = () => {
 
   const handleSaveChanges = async () => {
     try {
-      if (newUsername !== auth.currentUser.displayName) {
-        await updateProfile(auth.currentUser, { displayName: newUsername });
+      const currentUser = auth.currentUser;
+  
+      if (!currentUser) {
+        navigation.navigate('SignIn');
+        return;
+      }
+  
+      if (newUsername.length > 0) {
+        await updateProfile(currentUser, { displayName: newUsername });
         setUsername(newUsername); 
         setNewUserName(""); 
-
-        await auth.currentUser.reload();
-
+        await currentUser.reload();
       }
-     
+      
+      if (newEmail.length > 0 && newEmail !== email) {
+        await updateEmail(currentUser, newEmail);
+        setEmail(newEmail);
+        setNewEmail(""); 
+  
+        await signOut(auth);
+        navigation.navigate('Login');
+      }
+      setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
+    }
+  };
+  
+
+  const handleSendVerificationEmail = async () => {
+    try {
+      await sendEmailVerification(auth.currentUser);
+      Alert.alert("Başarılı", "Doğrulama e-postası gönderildi.");
+    } catch (error) {
+      console.error("Doğrulama e-postası gönderme hatası:", error);
     }
   };
 
@@ -152,7 +177,12 @@ const ProfileScreen = () => {
             <Text style={styles.menuItemText}>Ayarlar</Text>
           </View>
         </TouchableRipple>
-      
+        <TouchableRipple onPress={handleSendVerificationEmail}>
+          <View style={styles.menuItem}>
+            <Icon name="email" color="#FF6347" size={25} />
+            <Text style={styles.menuItemText}>Doğrulama E-postası Gönder</Text>
+          </View>
+        </TouchableRipple>
       </View>
 
       <Modal
