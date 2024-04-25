@@ -1,3 +1,5 @@
+// ProfileScreen.js
+
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 import {
@@ -11,14 +13,12 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from "./HomeScreen";
 import { useNavigation } from "@react-navigation/native";
-import { signOut } from "firebase/auth"; // Firebase Authentication'dan signOut fonksiyonunu içe aktarın
-import { auth } from "../config/firebaseConfig"; // Firebase yapılandırma dosyanızdan auth nesnesini içe aktarın
-
+import { signOut } from "firebase/auth";
+import { auth } from "../config/firebaseConfig";
 
 const handleSignOut = async () => {
   try {
-      await signOut(auth); // Firebase Authentication'dan oturumu kapat
-      // Oturumu kapattıktan sonra kullanıcıyı giriş ekranına yönlendirin
+      await signOut(auth);
   } catch (error) {
       console.error('Oturum kapatma hatası:', error);
   }
@@ -26,6 +26,10 @@ const handleSignOut = async () => {
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+
+  // Kullanıcı adı ve e-postayı al
+  const username = auth.currentUser.displayName;
+  const email = auth.currentUser.email;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,6 +42,7 @@ const ProfileScreen = () => {
             size={80}
           />
           <View style={{ marginLeft: 10 }}>
+            {/* Kullanıcı adını ve e-postayı göster */}
             <Title
               style={[
                 styles.title,
@@ -47,9 +52,9 @@ const ProfileScreen = () => {
                 },
               ]}
             >
-              Muhammed Samet Akgül
+              {username}
             </Title>
-            <Caption style={styles.caption}>msametakgul@gmail.com</Caption>
+            <Caption style={styles.caption}>{email}</Caption>
           </View>
         </View>
       </View>
