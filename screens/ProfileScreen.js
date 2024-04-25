@@ -50,7 +50,6 @@ const ProfileScreen = () => {
   const navigateToChangePassword = () => {
     navigation.navigate('ChangePassword'); 
   };
-
   const handleSaveChanges = async () => {
     try {
       const currentUser = auth.currentUser;
@@ -74,7 +73,10 @@ const ProfileScreen = () => {
   
         await signOut(auth);
         navigation.navigate('Login');
+        return; 
       }
+  
+      // Güncellemeleri kaydet
       setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
