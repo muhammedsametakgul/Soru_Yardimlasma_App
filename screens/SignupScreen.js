@@ -2,15 +2,27 @@ import React, { useState } from 'react';
 import { Alert, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { Colors } from '../utils/Colors';
 import { useNavigation } from "@react-navigation/native";
+import { signUpWithEmailAndPassword } from '../service/SignupUser';
 
 const SignupScreen = () => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigation = useNavigation();
 
-  const handleSignup = () => {
- 
+  const handleSignup = async() => {
+    try {
+      if (password !== confirmPassword) {
+        throw new Error("Parolalar eşleşmiyor.");
+      }
+      signUpWithEmailAndPassword(email, password, username)
+    .then((user) => {
+      console.log("Kullanıcı başarıyla oluşturuldu:", user);
+    })
+    } catch (error) {
+      console.log(error);
+    }
   };    
 
   return (
@@ -19,8 +31,16 @@ const SignupScreen = () => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
+          placeholder='Kullanıcı Adı'
+          value={(username) => setUsername(username)}
+          onChangeText={setUsername}
+          autoCorrect={false}
+          autoCapitalize='none'
+        />
+        <TextInput
+          style={styles.input}
           placeholder='Email'
-          value={email}
+          value={(email) => setEmail(email)}
           onChangeText={setEmail}
           autoCorrect={false}
           autoCapitalize='none'
@@ -29,7 +49,7 @@ const SignupScreen = () => {
           style={styles.input}
           placeholder='Şifre'
           secureTextEntry
-          value={password}
+          value={(password) => setPassword(password)}
           onChangeText={setPassword}
           autoCorrect={false}
           autoCapitalize='none'
@@ -38,7 +58,7 @@ const SignupScreen = () => {
           style={styles.input}
           placeholder='Şifreyi Onayla'
           secureTextEntry
-          value={confirmPassword}
+          value={(confirmPassword) => setConfirmPassword(confirmPassword)}
           onChangeText={setConfirmPassword}
           autoCorrect={false}
           autoCapitalize='none'
@@ -50,10 +70,8 @@ const SignupScreen = () => {
       </Pressable>
 
       <Pressable onPress={() => navigation.navigate("Login")}>
-      <Text style={styles.footerText}>Hesabın zaten var mı?<Text style={styles.login}> Giriş Yap</Text></Text>
-
+        <Text style={styles.footerText}>Hesabın zaten var mı?<Text style={styles.login}> Giriş Yap</Text></Text>
       </Pressable>
-
     </SafeAreaView>
   )
 }
