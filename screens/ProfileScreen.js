@@ -67,13 +67,11 @@ const ProfileScreen = () => {
       }
       
       if (newEmail.length > 0 && newEmail !== email) {
+        await currentUser.reauthenticateWithCredential(reauthenticationCredential);
         await updateEmail(currentUser, newEmail);
+        console.log("Email Updated");
         setEmail(newEmail);
         setNewEmail(""); 
-  
-        await signOut(auth);
-        navigation.navigate('Login');
-        return; 
       }
   
       // Güncellemeleri kaydet
