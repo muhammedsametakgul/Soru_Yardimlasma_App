@@ -30,8 +30,9 @@ const CommentScreen = () => {
     fetchData();
   }, []);
 
+
   const fetchData = async () => {
-    const questionId = route.params.questionId;
+    const questionId = route.params?.questionId;
 
     try {
       const commentsData = await getCommentsForQuestion(questionId);
@@ -48,6 +49,7 @@ const CommentScreen = () => {
     setRefreshing(true);
     fetchData();
   };
+  
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,15 +78,20 @@ const CommentScreen = () => {
   const handleCommentSubmit = async () => {
     console.log("Submit Comment:", commentText);
     try {
+      const questionId = route.params?.questionId; 
+      if (!questionId) {
+        throw new Error("Question ID not found.");
+      }
+  
       const addedCommentRef = await createComment(
-        "2o0UvBvMV0AmZrq4xaOK",
+        questionId,
         commentText,
         selectedImage 
       );
-
+  
       setSelectedImage(null);
       setCommentText("");
-        } catch (error) {
+    } catch (error) {
       console.error("Error creating comment:", error);
     }
   };
