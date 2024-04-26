@@ -10,7 +10,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
 
-const ProfileBox = ({ name, description, imageSource, questionId }) => {
+const ProfileBox = ({ name, description, imageSource, questionId, date }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -19,7 +19,7 @@ const ProfileBox = ({ name, description, imageSource, questionId }) => {
   };
 
   const handleCommentsPress = () => {
-    navigation.navigate('Comment', { questionId }); // questionId'yi CommentScreen'e iletiyoruz
+    navigation.navigate('Comment', { questionId }); // questionId'yi CommentScreen'e iletiyorum routre param için
   };
 
   return (
@@ -27,6 +27,7 @@ const ProfileBox = ({ name, description, imageSource, questionId }) => {
       <View style={styles.profileHeader}>
         <Text style={styles.profileName}>{name}</Text>
         <View style={styles.separator}></View>
+        <Text style={styles.date}>{date}</Text> 
       </View>
       <Text style={styles.description}>{description}</Text>
       {imageSource && imageSource.uri !== null ? (
@@ -82,9 +83,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileName: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "bold",
-    marginRight: 10,
+    marginRight: 15,
+  },
+  date: {
+    fontSize: 12,
+    color: "#777",
+    marginRight: 0
   },
   separator: {
     flex: 1,

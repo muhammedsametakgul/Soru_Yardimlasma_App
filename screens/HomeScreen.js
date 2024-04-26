@@ -56,7 +56,8 @@ const HomeScreen = () => {
                 name={question.title}
                 description={question.question}
                 imageSource={{ uri: question.imageUrl }}
-                questionId={question.id} // Doğrudan doc.id kullanılıyor
+                questionId={question.id}
+                date={question.createdAt.toDate().toLocaleDateString()} 
               />
             </View>
           ))}
