@@ -47,9 +47,14 @@ const ProfileScreen = () => {
     }
   };
 
+  const navigateToMyQuestions = () => {
+    navigation.navigate('MyQuestions'); 
+  };
+
   const navigateToChangePassword = () => {
     navigation.navigate('ChangePassword'); 
   };
+
   const handleSaveChanges = async () => {
     try {
       const currentUser = auth.currentUser;
@@ -74,7 +79,6 @@ const ProfileScreen = () => {
         setNewEmail(""); 
       }
   
-      // Güncellemeleri kaydet
       setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
@@ -146,10 +150,10 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() =>navigateToMyQuestions()}>
           <View style={styles.menuItem}>
             <Icon name="bookmark" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Kaydedilen Sorular</Text>
+            <Text style={styles.menuItemText}>Sorduğum Sorular</Text>
           </View>
         </TouchableRipple>
 
