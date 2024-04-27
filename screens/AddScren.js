@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import ImageButton from "../components/ImageButton";
 import * as ImagePicker from "expo-image-picker";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 import {
   uploadImageAndCreateQuestion
@@ -25,6 +26,7 @@ const AddScreen = () => {
   const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userUUID, setUserUUID] = useState(null); 
   const userEmail = GetUserEmail(); 
 
   useEffect(() => {
@@ -33,6 +35,17 @@ const AddScreen = () => {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       setGalleryPermissions(galleryStatus.status === "granted");
     })();
+
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserUUID(user.uid);
+      } else {
+        setUserUUID(null); 
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const pickImage = async () => {
@@ -64,7 +77,7 @@ const AddScreen = () => {
   };
 
   const question = async () => {
-    await uploadImageAndCreateQuestion(userEmail,text, image);
+    await uploadImageAndCreateQuestion(userEmail, text, image, userUUID); 
     setText("");
     setImage(null);
   };
