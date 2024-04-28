@@ -70,6 +70,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    marginTop:50
   },
   contentContainer: {
     paddingBottom: 100,

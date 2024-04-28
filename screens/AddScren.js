@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#fff",
+    marginTop:50
   },
   inputContainer: {
     padding: 10,
