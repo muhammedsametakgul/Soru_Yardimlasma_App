@@ -15,7 +15,7 @@ export const createQuestion = async (title, questionText) => {
 
 
 
-export const uploadImageAndCreateQuestion = async (title, questionText, imageUri,userId) => {
+export const uploadImageAndCreateQuestion = async (title, questionText, imageUri,userId,lesson, subject) => {
   try {
     let imageUrl = null;
     if (imageUri) {
@@ -29,7 +29,9 @@ export const uploadImageAndCreateQuestion = async (title, questionText, imageUri
       question: questionText,
       imageUrl: imageUrl,
       createdAt: timestamp,
-      userId: userId
+      userId: userId,
+      lesson:lesson,
+      subject: subject
     });
 
     const addedQuestionId = addedQuestionRef.id;

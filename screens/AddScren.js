@@ -18,6 +18,8 @@ import {
 } from "../service/createQuestions";
 import GetUserEmail from "../service/GetUserEmail";
 
+
+
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
 
@@ -27,19 +29,21 @@ const AddScreen = () => {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userUUID, setUserUUID] = useState(null); 
-  const userEmail = GetUserEmail(); 
+  const [userEmail, setUserEmail] = useState(null); 
 
   useEffect(() => {
     (async () => {
       const galleryStatus =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       setGalleryPermissions(galleryStatus.status === "granted");
-    })();
+    }
+  )();
 
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserUUID(user.uid);
+        setUserEmail(GetUserEmail()); 
       } else {
         setUserUUID(null); 
       }
@@ -47,6 +51,8 @@ const AddScreen = () => {
 
     return () => unsubscribe();
   }, []);
+
+ 
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -77,7 +83,7 @@ const AddScreen = () => {
   };
 
   const question = async () => {
-    await uploadImageAndCreateQuestion(userEmail, text, image, userUUID); 
+    await uploadImageAndCreateQuestion(userEmail, text, image, userUUID,"Matematik","Lineer Cebir"); 
     setText("");
     setImage(null);
   };
@@ -116,7 +122,7 @@ const AddScreen = () => {
         <TouchableOpacity style={styles.button} onPress={handleAddPress}>
           <Text style={styles.buttonText}>Soru Ekle</Text>
         </TouchableOpacity>
-      )}
+      )}      
     </View>
   );
 };
@@ -192,6 +198,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  mathQuestionsContainer: {
+    marginTop: 20,
+    width: "90%",
+  },
+  mathQuestionsHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  mathQuestionText: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
 
