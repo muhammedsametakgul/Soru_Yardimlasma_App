@@ -18,9 +18,8 @@ import {
 } from "../service/createQuestions";
 import GetUserEmail from "../service/GetUserEmail";
 
-
-
 const galleryIcon = require("../assets/images/galleryicon.jpg");
+const cameraIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
 
 const AddScreen = () => {
@@ -36,23 +35,21 @@ const AddScreen = () => {
       const galleryStatus =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       setGalleryPermissions(galleryStatus.status === "granted");
-    }
-  )();
-
+    })();
+  
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserUUID(user.uid);
-        setUserEmail(GetUserEmail()); 
+        setUserEmail(user.email); 
       } else {
         setUserUUID(null); 
       }
     });
-
+  
     return () => unsubscribe();
   }, []);
-
- 
+  
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -67,6 +64,22 @@ const AddScreen = () => {
       setImage(result.assets[0].uri);
     }
   };
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+  
+    if (!result.cancelled) {
+      setImage(result.assets[0].uri);
+      console.log("Çekilen fotoğraf URI'si:", result.assets[0].uri);
+    } else {
+      console.log("Kullanıcı fotoğraf çekmeyi iptal etti veya bir hata oluştu.");
+    }
+  };
+  
 
   const deleteImage = () => {
     setImage(null);
@@ -101,9 +114,16 @@ const AddScreen = () => {
         />
       </View>
 
-      <TouchableOpacity style={styles.galleryButton} onPress={pickImage}>
-        <Image source={galleryIcon} style={styles.icon} />
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={pickImage}>
+          <Image source={galleryIcon} style={styles.icon} />
+          <Text style={styles.buttonText}>Görsel Seç</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={takePhoto}>
+          <Image source={cameraIcon} style={styles.icon} />
+          <Text style={styles.buttonText}>Kamera ile Çek</Text>
+        </TouchableOpacity>
+      </View>
 
       {image && (
         <View style={styles.imageContainer}>
@@ -138,31 +158,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: "98%",
   },
-  galleryButton: {
-    marginTop: "2%",
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 20,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
-    width: "50%",
-    alignItems: "center",
-    backgroundColor: "green",
+    borderWidth: 1,
+    borderColor: "black",
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "black",
+    marginLeft: 10,
   },
   icon: {
     width: 24,
     height: 24,
-  },
-  button: {
-    backgroundColor: "blue",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: "#000",
-    marginTop: "10%",
-    width: "60%",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 18,
   },
   input: {
     borderWidth: 1,
@@ -175,7 +193,6 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   imageContainer: {
-    marginTop: 20,
     alignItems: "center",
     position: "relative",
   },
@@ -198,19 +215,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  mathQuestionsContainer: {
-    marginTop: 20,
-    width: "90%",
-  },
-  mathQuestionsHeader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  mathQuestionText: {
-    fontSize: 16,
-    marginBottom: 5,
   },
 });
 
