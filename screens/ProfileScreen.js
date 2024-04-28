@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
   Alert,
+  Share,
 } from "react-native";
 import {
   Avatar,
@@ -95,6 +96,25 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleShareApp = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Hadi sen de gel bu uygulamaya: https://github.com/muhammedsametakgul/Soru_Yardimlasma_App',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log('Paylaşım gerçekleştirildi:', result.activityType);
+        } else {
+          console.log('Paylaşım gerçekleştirildi');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log('Paylaşım iptal edildi');
+      }
+    } catch (error) {
+      console.error('Paylaşma hatası:', error.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
@@ -157,7 +177,7 @@ const ProfileScreen = () => {
           </View>
         </TouchableRipple>
 
-        <TouchableRipple onPress={HomeScreen}>
+        <TouchableRipple onPress={handleShareApp}>
           <View style={styles.menuItem}>
             <Icon name="share-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Arkadaşlarınla Paylaş</Text>
