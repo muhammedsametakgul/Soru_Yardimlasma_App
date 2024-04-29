@@ -19,14 +19,13 @@ const ProfileBox = ({ name, description, imageSource, questionId, date }) => {
   };
 
   const handleCommentsPress = () => {
-    navigation.navigate('Comment', { questionId }); // questionId'yi CommentScreen'e iletiyorum routre param için
+    navigation.navigate('Comment', { questionId });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.profileHeader}>
         <Text style={styles.profileName}>{name}</Text>
-        <View style={styles.separator}></View>
         <Text style={styles.date}>{date}</Text> 
       </View>
       <Text style={styles.description}>{description}</Text>
@@ -68,37 +67,36 @@ const ProfileBox = ({ name, description, imageSource, questionId, date }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    backgroundColor: "#FFFFFF",
+    width: "105%",
+    backgroundColor: "#e1e2e3", 
     padding: 20,
-    marginVertical: 8,
-    borderRadius: 10,
+    marginVertical: 3,
     elevation: 3,
-    shadowColor: "#000000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderTopColor: "#CCCCCC",
+    borderBottomColor: "#CCCCCC",
+    borderRadius: 10, 
   },
   profileHeader: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 5,
   },
   profileName: {
     fontSize: 14,
     fontWeight: "bold",
-    marginRight: 15,
+    color: "#000",
   },
   date: {
     fontSize: 12,
     color: "#777",
-    marginRight: 0
-  },
-  separator: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#CCCCCC",
   },
   description: {
     marginVertical: 10,
+    fontSize: 14,
+    color: "#555555",
   },
   image: {
     width: '100%',
@@ -111,10 +109,12 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignSelf: "flex-start",
     marginTop: 10,
-    padding: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: "#007AFF",
-    borderRadius: 8,
+    borderRadius: 25, 
     alignItems: "center",
+    justifyContent: "center",
   },
   commentsButtonText: {
     color: "#FFF",
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
   modalCloseText: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#333333",
   },
   modalImage: {
     width: "90%",
