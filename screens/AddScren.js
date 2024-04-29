@@ -8,19 +8,20 @@ import {
   Text,
   Alert,
   ActivityIndicator,
+  Modal,
 } from "react-native";
-import ImageButton from "../components/ImageButton";
 import * as ImagePicker from "expo-image-picker";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import LottieView from "lottie-react-native"; 
 
 import {
   uploadImageAndCreateQuestion
 } from "../service/createQuestions";
-import GetUserEmail from "../service/GetUserEmail";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const cameraIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
+const loadingAnimation = require("../assets/animations/loading.json"); 
 
 const AddScreen = () => {
   const [text, setText] = useState("");
@@ -29,6 +30,7 @@ const AddScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [userUUID, setUserUUID] = useState(null); 
   const [userEmail, setUserEmail] = useState(null); 
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -49,7 +51,6 @@ const AddScreen = () => {
   
     return () => unsubscribe();
   }, []);
-  
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,7 +81,6 @@ const AddScreen = () => {
     }
   };
   
-
   const deleteImage = () => {
     setImage(null);
   };
@@ -92,7 +92,9 @@ const AddScreen = () => {
   const handleAddPress = async () => {
     setIsLoading(true);
     await question();
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   };
 
   const question = async () => {
@@ -134,15 +136,30 @@ const AddScreen = () => {
         </View>
       )}
 
-      {isLoading ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
+      <TouchableOpacity style={styles.button} onPress={handleAddPress}>
+        <Text style={styles.buttonText}>Soru Ekle</Text>
+      </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isLoading}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <LottieView
+              source={loadingAnimation}
+              autoPlay
+              loop
+              style={{ width: 200, height: 200 }}
+            />
+            <Text style={styles.modalText}>Yükleniyor...</Text>
+          </View>
         </View>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-          <Text style={styles.buttonText}>Soru Ekle</Text>
-        </TouchableOpacity>
-      )}      
+      </Modal>
     </View>
   );
 };
@@ -212,10 +229,21 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  loadingContainer: {
+  modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    marginTop: 20,
   },
 });
 
