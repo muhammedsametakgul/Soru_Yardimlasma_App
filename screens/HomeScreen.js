@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   RefreshControl,
   ActivityIndicator,
+  Image
 } from "react-native";
 import ProfileBox from "../components/ProfileBox";
 import { readQuestions } from "../service/readQuestions";
@@ -39,6 +40,10 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
+      <View style={styles.header}>
+        <Image source={require('../assets/images/YKSLogoV2.png')} style={styles.logo} />
+        <Text style={styles.headerText}>Hedeflerinize bir adım daha...</Text>
+      </View>
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
@@ -70,7 +75,27 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop:50
+    marginTop: 50
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start', 
+    backgroundColor:'#fff',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  headerText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 10, 
+    flex: 1, 
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
   },
   contentContainer: {
     paddingBottom: 100,
