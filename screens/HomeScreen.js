@@ -12,13 +12,23 @@ import {
 import ProfileBox from "../components/ProfileBox";
 import { readQuestions } from "../service/readQuestions";
 
+const motivationQuotes = [
+  "Hedeflerinize bir adım daha...",
+  "Her gün küçük bir ilerleme, büyük bir başarıya yol açar.",
+  "Başarı için en önemli adım, cesaretli bir adım atmaktır.",
+  "Hayallerinizi kovalayın, başarıya doğru adım adım ilerleyin.",
+  "Bugün için en iyisini yapın, yarın için en iyisini bekleyin.",
+];
+
 const HomeScreen = () => {
   const [questions, setQuestions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [motivationText, setMotivationText] = useState("");
 
   useEffect(() => {
     fetchData();
+    setRandomMotivation();
   }, []);
 
   const fetchData = async () => {
@@ -38,11 +48,16 @@ const HomeScreen = () => {
     fetchData();
   };
 
+  const setRandomMotivation = () => {
+    const randomIndex = Math.floor(Math.random() * motivationQuotes.length);
+    setMotivationText(motivationQuotes[randomIndex]);
+  };
+
   return (
     <SafeAreaView style={styles.screen}>
       <View style={styles.header}>
         <Image source={require('../assets/images/YKSLogoV2.png')} style={styles.logo} />
-        <Text style={styles.headerText}>Hedeflerinize bir adım daha...</Text>
+        <Text style={styles.headerText}>{motivationText}</Text>
       </View>
       {loading ? (
         <View style={styles.loadingContainer}>
@@ -85,6 +100,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    marginBottom:20
   },
   headerText: {
     fontSize: 14,
