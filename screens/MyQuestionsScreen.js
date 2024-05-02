@@ -10,20 +10,30 @@ import {
 } from "react-native";
 import ProfileBox from "../components/ProfileBox";
 import getQuestionsByUserId from "../service/getQuestionsByUserId";
+import { auth } from "../config/firebaseConfig";
 
 
 const MyQuestionsScreen = () => {
   const [questions, setQuestions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null); 
 
   useEffect(() => {
     fetchData();
+    fetchUserId(); 
   }, []);
+
+  const fetchUserId = () => {
+    const currentUser = auth.currentUser; 
+    if (currentUser) {
+      setUserId(currentUser.uid); 
+    }
+  };
 
   const fetchData = async () => {
     try {
-      const userId = "3SU75NuiJAOJyxS7EJfRc8DVSm72";
+      if (!userId) return; 
 
       const fetchedQuestions = await getQuestionsByUserId(userId);
       console.log("Fetched Questions : "  + fetchedQuestions)
@@ -54,17 +64,21 @@ const MyQuestionsScreen = () => {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          {questions.map((question, index) => (
-            <View key={index} style={styles.profileWrapper}>
-              <ProfileBox
-                name={question.title}
-                description={question.question}
-                imageSource={{ uri: question.imageUrl }}
-                questionId={question.id}
-                date={question.createdAt.toDate().toLocaleDateString()} 
-              />
-            </View>
-          ))}
+          {questions.length === 0 ? (
+            <Text style={styles.noQuestionsText}>Soru Yok</Text>
+          ) : (
+            questions.map((question, index) => (
+              <View key={index} style={styles.profileWrapper}>
+                <ProfileBox
+                  name={question.title}
+                  description={question.question}
+                  imageSource={{ uri: question.imageUrl }}
+                  questionId={question.id}
+                  date={question.createdAt.toDate().toLocaleDateString()} 
+                />
+              </View>
+            ))
+          )}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -87,6 +101,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noQuestionsText: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 20,
   },
 });
 
