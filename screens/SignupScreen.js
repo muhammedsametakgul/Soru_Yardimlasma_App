@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     paddingHorizontal: 20,
-    borderColor: "red",
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 7,
     marginBottom: 15
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "orange",
     height: 45,
     borderColor: "gray",
     borderWidth: 1,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   login: {
-    color: "red",
+    color: "orange",
     fontSize: 13
   }
 });

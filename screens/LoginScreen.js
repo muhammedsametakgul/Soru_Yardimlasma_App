@@ -1,21 +1,18 @@
 import React, { useState } from "react";
 import {
   Alert,
-  Button,
   Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Colors } from "../utils/Colors";
-const google = require("../assets/images/google.png");
 import { useNavigation } from "@react-navigation/native";
-import { auth} from "../config/firebaseConfig";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../config/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+const google = require("../assets/images/google.png");
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -33,9 +30,6 @@ const LoginScreen = () => {
       });
   };
 
-  const handleSignup = () => {};
-  const [click, setClick] = useState(false);
-
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -46,8 +40,8 @@ const LoginScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Email"
-          value={username }
-          onChangeText={username => setUsername(username)}
+          value={username}
+          onChangeText={(username) => setUsername(username)}
           autoCorrect={false}
           autoCapitalize="none"
         />
@@ -56,32 +50,17 @@ const LoginScreen = () => {
           placeholder="Şifre"
           secureTextEntry
           value={password}
-          onChangeText={password => setPassword(password)}
+          onChangeText={(password) => setPassword(password)}
           autoCorrect={false}
           autoCapitalize="none"
         />
-      </View>
-      <View style={styles.rememberView}>
-        <View style={styles.switch}>
-          <Switch
-            value={click}
-            onValueChange={setClick}
-            trackColor={{ true: "green", false: "gray" }}
-          />
-          <Text style={styles.rememberText}>Beni hatırla</Text>
-        </View>
-        <View>
         <Pressable onPress={() => navigation.navigate("Reset")}>
-            <Text style={styles.forgetText}>Şifremi unuttum</Text>
-          </Pressable>
-        </View>
+          <Text style={[styles.forgetText, styles.marginBottom]}>Şifremi unuttum</Text>
+        </Pressable>
       </View>
 
       <View style={styles.buttonView}>
-        <Pressable
-          style={styles.button}
-          onPress={handleLogin}
-        >
+        <Pressable style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </Pressable>
         <Text style={styles.optionsText}>veya</Text>
@@ -93,7 +72,7 @@ const LoginScreen = () => {
 
       <Pressable onPress={() => navigation.navigate("Signup")}>
         <Text style={styles.signupText}>
-          Hesabın yok mu? <Text style={styles.redBold}>Kaydol</Text>
+          Hesabın yok mu? <Text style={styles.orangeBold}>Kaydol</Text>
         </Text>
       </Pressable>
     </SafeAreaView>
@@ -108,9 +87,9 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#fff",
   },
-  redBold: {
-    fontWeight: 'bold',
-    color: 'red',
+  orangeBold: {
+    fontWeight: "bold",
+    color: "orange",
   },
   image: {
     height: 250,
@@ -121,38 +100,26 @@ const styles = StyleSheet.create({
     gap: 15,
     width: "100%",
     paddingHorizontal: 40,
-    marginBottom: 5,
+    marginBottom: 20, 
   },
   input: {
     height: 50,
     paddingHorizontal: 20,
-    borderColor: "red",
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 7,
   },
-  rememberView: {
-    width: "100%",
-    paddingHorizontal: 50,
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 8,
-  },
-  switch: {
-    flexDirection: "row",
-    gap: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  rememberText: {
-    fontSize: 13,
-  },
   forgetText: {
     fontSize: 11,
-    color: "red",
+    color: "orange",
+    marginTop: 10, 
+    marginLeft:210
+  },
+  marginBottom: {
+    marginBottom: 10, 
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "orange",
     height: 45,
     borderColor: "gray",
     borderWidth: 1,
@@ -187,13 +154,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
   },
-  footerText: {
-    textAlign: "center",
-    color: "gray",
-  },
-  signup: {
-    color: "red",
-    fontSize: 13,
+  signupText: {
+    marginTop: 20,
+    
   },
 });
 
