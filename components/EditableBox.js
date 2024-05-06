@@ -8,13 +8,14 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
+import { FIRESTORE_DB } from "../config/firebaseConfig";
+import { deleteQuestion } from "../service/deleteQuestion";
 
 const EditableBox = ({ name, description, imageSource, questionId, date }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleImagePress = () => {
-    // Resme tıklanıldığında yapılacak işlemler
   };
 
   const handleCommentsPress = () => {
@@ -26,11 +27,19 @@ const EditableBox = ({ name, description, imageSource, questionId, date }) => {
   };
 
   const handleUpdatePress = () => {
-    setMenuVisible(false); // Menüyü kapat
+    setMenuVisible(false); 
   };
 
-  const handleDeletePress = () => {
+  const handleDeletePress = async () => {
     setMenuVisible(false); 
+    console.log("Silinecek belgenin doc id'si: ", questionId); 
+
+    try {
+      deleteQuestion(questionId)
+      console.log("Belge başarıyla silindi.");
+    } catch (error) {
+      console.error("Belge silinirken bir hata oluştu: ", error);
+    }
   };
 
   const handleCancelPress = () => {
