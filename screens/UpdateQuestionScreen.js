@@ -18,6 +18,7 @@ import {
   uploadImageAndCreateQuestion
 } from "../service/createQuestions";
 import getQuestionByQuestionId from "../service/getQuestionByQuestionId";
+import updateQuestion from "../service/updateQuestion"; 
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const cameraIcon = require("../assets/images/galleryicon.jpg");
@@ -77,7 +78,7 @@ const UpdateQuestionScreen = ({ route }) => {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -99,20 +100,8 @@ const UpdateQuestionScreen = ({ route }) => {
 
   const handleUpdatePress = async () => {
     setIsLoading(true);
-    await updateQuestion();
+    await updateQuestion(questionId, text, image);
     setIsLoading(false);
-  };
-
-  const updateQuestion = async () => {
-    try {
-      await uploadImageAndCreateQuestion(userEmail, text, image, userUUID, "Matematik", "Lineer Cebir"); 
-      setText("");
-      setImage(null);
-      Alert.alert("Success", "Question updated successfully.");
-    } catch (error) {
-      console.error("Error updating question:", error);
-      Alert.alert("Error", "Failed to update question.");
-    }
   };
 
   return (
