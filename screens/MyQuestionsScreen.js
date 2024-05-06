@@ -8,9 +8,9 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
-import ProfileBox from "../components/ProfileBox";
 import getQuestionsByUserId from "../service/getQuestionsByUserId";
 import { auth } from "../config/firebaseConfig";
+import EditableBox from "../components/EditableBox";
 
 
 const MyQuestionsScreen = () => {
@@ -69,7 +69,7 @@ const MyQuestionsScreen = () => {
           ) : (
             questions.map((question, index) => (
               <View key={index} style={styles.profileWrapper}>
-                <ProfileBox
+                <EditableBox
                   name={question.title}
                   description={question.question}
                   imageSource={{ uri: question.imageUrl }}
