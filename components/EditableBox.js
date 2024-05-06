@@ -27,8 +27,10 @@ const EditableBox = ({ name, description, imageSource, questionId, date }) => {
   };
 
   const handleUpdatePress = () => {
-    setMenuVisible(false); 
-  };
+    setMenuVisible(false); // Menüyü kapat
+    navigation.navigate('UpdateQuestion', { questionId: questionId });
+};
+  
 
   const handleDeletePress = async () => {
     setMenuVisible(false); 

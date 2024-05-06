@@ -11,32 +11,33 @@ import {
 import getQuestionsByUserId from "../service/getQuestionsByUserId";
 import { auth } from "../config/firebaseConfig";
 import EditableBox from "../components/EditableBox";
-
+import { useNavigation } from '@react-navigation/native';
 
 const MyQuestionsScreen = () => {
   const [questions, setQuestions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null); 
+  const [userId, setUserId] = useState(null);
+  const navigation = useNavigation(); // Navigation hook'unu kullan
 
   useEffect(() => {
     fetchData();
-    fetchUserId(); 
+    fetchUserId();
   }, []);
 
   const fetchUserId = () => {
-    const currentUser = auth.currentUser; 
+    const currentUser = auth.currentUser;
     if (currentUser) {
-      setUserId(currentUser.uid); 
+      setUserId(currentUser.uid);
     }
   };
 
   const fetchData = async () => {
     try {
-      if (!userId) return; 
+      if (!userId) return;
 
       const fetchedQuestions = await getQuestionsByUserId(userId);
-      console.log("Fetched Questions : "  + fetchedQuestions)
+      console.log("Fetched Questions : " + fetchedQuestions);
       setQuestions(fetchedQuestions);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -74,7 +75,8 @@ const MyQuestionsScreen = () => {
                   description={question.question}
                   imageSource={{ uri: question.imageUrl }}
                   questionId={question.id}
-                  date={question.createdAt.toDate().toLocaleDateString()} 
+                  date={question.createdAt.toDate().toLocaleDateString()}
+                  onUpdatePress={() => handleUpdatePress(question.id)} // Güncelleme işlevini çağırırken soru ID'sini ile
                 />
               </View>
             ))
@@ -88,7 +90,7 @@ const MyQuestionsScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop :40
+    marginTop: 40,
   },
   contentContainer: {
     paddingBottom: 100,

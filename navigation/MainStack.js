@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CommentScreen from "../screens/CommentScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import MyQuestionsScreen from "../screens/MyQuestionsScreen";
+import UpdateQuestionScreen from "../screens/UpdateQuestionScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ const MainStack = () => {
             <Stack.Screen name="Comment" component={CommentScreen}/>
             <Stack.Screen name="ChangePassword" component={ChangePasswordScreen}/>
             <Stack.Screen name="MyQuestions" component={MyQuestionsScreen}/>
+            <Stack.Screen name="UpdateQuestion" component={UpdateQuestionScreen}/>
 
         </Stack.Navigator> 
     );
