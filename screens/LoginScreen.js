@@ -71,7 +71,7 @@ const LoginScreen = () => {
           <Text style={styles.rememberText}>Beni hatırla</Text>
         </View>
         <View>
-          <Pressable onPress={() => Alert.alert("Şifremi unuttum")}>
+        <Pressable onPress={() => navigation.navigate("Reset")}>
             <Text style={styles.forgetText}>Şifremi unuttum</Text>
           </Pressable>
         </View>
