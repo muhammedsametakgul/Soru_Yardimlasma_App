@@ -26,9 +26,14 @@ const LoginScreen = () => {
       })
       .catch((error) => {
         const errorMessage = error.message;
-        Alert.alert(errorMessage);
+        if (errorMessage.includes("invalid-email") || errorMessage.includes("wrong-password")) {
+          Alert.alert("Oppps!! Email veya Şifre hatalı. Lütfen kontrol edip tekrar deneyiniz");
+        } else {
+          Alert.alert(errorMessage);
+        }
       });
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
