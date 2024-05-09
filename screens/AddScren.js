@@ -18,6 +18,7 @@ import LottieView from "lottie-react-native";
 
 import { uploadImageAndCreateQuestion } from "../service/createQuestions";
 import LessonComponent from "../components/LessonComponent";
+import { Colors } from "../utils/Colors";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
@@ -150,10 +151,13 @@ const AddScreen = () => {
         />
       </View>
 
-      <LessonComponent 
-        onSelectLessonAndTopic={handleLessonAndTopicSelect}  
-        key={lessonComponentKey}
-      />
+      <View style={styles.lessonComponentContainer}>
+  <LessonComponent 
+    onSelectLessonAndTopic={handleLessonAndTopicSelect}  
+    key={lessonComponentKey}
+  />
+</View>
+
       <TouchableOpacity
         style={[styles.button, { marginBottom: 20 }]}
         onPress={() => setModalVisible(true)}
@@ -172,7 +176,7 @@ const AddScreen = () => {
       )}
 
       <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-        <Text style={styles.buttonText}>Soru Ekle</Text>
+        <Text style={styles.buttonText}>Soruyu Paylaş</Text>
       </TouchableOpacity>
 
       <Modal
@@ -239,6 +243,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     padding: 10,
     backgroundColor: "#fff",
+    color: Colors.textColor,
+    fontWeight:"bold",
     width: "98%",
   },
   buttonContainer: {
@@ -255,6 +261,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "black",
+    backgroundColor : Colors.buttonColor,
   },
   buttonText: {
     fontSize: 16,
@@ -262,9 +269,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   optionButton: {
-    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    paddingVertical :8
   },
   optionText: {
     fontSize: 16,
@@ -321,6 +328,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 20,
   },
+  lessonComponentContainer: {
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: Colors.lessonComponentBackground,
+    borderRadius: 10,
+  },
+  
 });
 
 export default AddScreen;

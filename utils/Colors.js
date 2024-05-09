@@ -10,8 +10,18 @@ export const Colors = {
     dark: '#343a40',
     background :'#ffffff',
 
+    //General 
+    textColor : '#000',
+    buttonColor: '#fff',
 
+
+    
     //Login
     buttonLogin :'#F59D00', 
+
+
+    //Lesson Component
+    listBoxColor : '#F59D00',
+    modalBackgroungColor : '#ffffff'
   };
   
