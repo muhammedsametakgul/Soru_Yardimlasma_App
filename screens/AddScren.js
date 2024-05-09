@@ -85,14 +85,38 @@ const AddScreen = () => {
   }
 
   const handleAddPress = async () => {
+    if (!selectedLesson  ) {
+      Alert.alert(
+        "Eksik Bilgi",
+        "Lütfen Ders Seçiniz ",
+        [{ text: "Tamam" }]
+      );
+      return;
+    }
+    else if (!selectedTopic  ) {
+      Alert.alert(
+        "Eksik Bilgi",
+        "Lütfen Konu Seçiniz ",
+        [{ text: "Tamam" }]
+      );
+      return;
+    } 
+    else if (!text  ) {
+      Alert.alert(
+        "Eksik Bilgi",
+        "Lütfen Soru Metnini Giriniz ",
+        [{ text: "Tamam" }]
+      );
+      return;
+    }
     setIsLoading(true);
     await question();
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-    setLessonComponentKey(prevKey => prevKey + 1); 
-
+    setLessonComponentKey(prevKey => prevKey + 1);
   };
+  
 
   
   const question = async () => {
