@@ -17,6 +17,7 @@ import LottieView from "lottie-react-native";
 import {
   uploadImageAndCreateQuestion
 } from "../service/createQuestions";
+import LessonComponent from "../components/LessonComponent";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const cameraIcon = require("../assets/images/galleryicon.jpg");
@@ -52,32 +53,24 @@ const AddScreen = () => {
     return () => unsubscribe();
   }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    console.log(result.assets[0].uri);
-
-    if (!result.cancelled) {
-      setImage(result.assets[0].uri);
+  const pickImage = async (sourceType) => {
+    let result;
+    if (sourceType === 'gallery') {
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+    } else if (sourceType === 'camera') {
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
     }
-  };
 
-  const takePhoto = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-  
     if (!result.cancelled) {
       setImage(result.assets[0].uri);
-      console.log("Çekilen fotoğraf URI'si:", result.assets[0].uri);
-    } else {
-      console.log("Kullanıcı fotoğraf çekmeyi iptal etti veya bir hata oluştu.");
     }
   };
   
@@ -115,17 +108,12 @@ const AddScreen = () => {
           placeholderTextColor="gray"
         />
       </View>
+      <LessonComponent/>
+      <TouchableOpacity style={[styles.button, { marginBottom: 20 }]} onPress={() => setModalVisible(true)}>
+  <Image source={galleryIcon} style={styles.icon} />
+  <Text style={styles.buttonText}>Görsel Seç</Text>
+</TouchableOpacity>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={pickImage}>
-          <Image source={galleryIcon} style={styles.icon} />
-          <Text style={styles.buttonText}>Görsel Seç</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={takePhoto}>
-          <Image source={cameraIcon} style={styles.icon} />
-          <Text style={styles.buttonText}>Kamera ile Çek</Text>
-        </TouchableOpacity>
-      </View>
 
       {image && (
         <View style={styles.imageContainer}>
@@ -139,6 +127,24 @@ const AddScreen = () => {
       <TouchableOpacity style={styles.button} onPress={handleAddPress}>
         <Text style={styles.buttonText}>Soru Ekle</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity style={styles.optionButton} onPress={() => { pickImage('gallery'); setModalVisible(false); }}>
+              <Text style={styles.optionText}>Galeriden Seç</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionButton} onPress={() => { pickImage('camera'); setModalVisible(false); }}>
+              <Text style={styles.optionText}>Kamera ile Çek</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <Modal
         animationType="slide"
@@ -196,6 +202,16 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: 10,
   },
+  optionButton: {
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  optionText: {
+    fontSize: 16,
+    color: 'black',
+    textAlign: 'center',
+  },
   icon: {
     width: 24,
     height: 24,
@@ -219,6 +235,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "cover",
     borderRadius: 10,
+    marginBottom:20
   },
   deleteButton: {
     position: "absolute",
