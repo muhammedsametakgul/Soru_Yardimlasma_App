@@ -1,3 +1,5 @@
+// AddScreen.js dosyasında
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -11,27 +13,27 @@ import {
   Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import LottieView from "lottie-react-native"; 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import LottieView from "lottie-react-native";
 
-import {
-  uploadImageAndCreateQuestion
-} from "../service/createQuestions";
+import { uploadImageAndCreateQuestion } from "../service/createQuestions";
 import LessonComponent from "../components/LessonComponent";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
-const cameraIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
-const loadingAnimation = require("../assets/animations/loading.json"); 
+const loadingAnimation = require("../assets/animations/loading.json");
 
 const AddScreen = () => {
   const [text, setText] = useState("");
   const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [userUUID, setUserUUID] = useState(null); 
-  const [userEmail, setUserEmail] = useState(null); 
+  const [userUUID, setUserUUID] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState("");
+  const [lessonComponentKey, setLessonComponentKey] = useState(0); 
 
   useEffect(() => {
     (async () => {
@@ -39,29 +41,29 @@ const AddScreen = () => {
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       setGalleryPermissions(galleryStatus.status === "granted");
     })();
-  
+
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserUUID(user.uid);
-        setUserEmail(user.email); 
+        setUserEmail(user.email);
       } else {
-        setUserUUID(null); 
+        setUserUUID(null);
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
 
   const pickImage = async (sourceType) => {
     let result;
-    if (sourceType === 'gallery') {
+    if (sourceType === "gallery") {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
       });
-    } else if (sourceType === 'camera') {
+    } else if (sourceType === "camera") {
       result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -73,7 +75,7 @@ const AddScreen = () => {
       setImage(result.assets[0].uri);
     }
   };
-  
+
   const deleteImage = () => {
     setImage(null);
   };
@@ -88,12 +90,27 @@ const AddScreen = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
+    setLessonComponentKey(prevKey => prevKey + 1); 
+
   };
 
+  
   const question = async () => {
-    await uploadImageAndCreateQuestion(userEmail, text, image, userUUID,"Matematik","Lineer Cebir"); 
+    await uploadImageAndCreateQuestion(
+      userEmail,
+      text,
+      image,
+      userUUID,
+      selectedLesson,
+      selectedTopic
+    );
     setText("");
     setImage(null);
+  };
+
+  const handleLessonAndTopicSelect = (lesson, topic) => {
+    setSelectedLesson(lesson);
+    setSelectedTopic(topic);
   };
 
   return (
@@ -108,12 +125,18 @@ const AddScreen = () => {
           placeholderTextColor="gray"
         />
       </View>
-      <LessonComponent/>
-      <TouchableOpacity style={[styles.button, { marginBottom: 20 }]} onPress={() => setModalVisible(true)}>
-  <Image source={galleryIcon} style={styles.icon} />
-  <Text style={styles.buttonText}>Görsel Seç</Text>
-</TouchableOpacity>
 
+      <LessonComponent 
+        onSelectLessonAndTopic={handleLessonAndTopicSelect}  
+        key={lessonComponentKey}
+      />
+      <TouchableOpacity
+        style={[styles.button, { marginBottom: 20 }]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Image source={galleryIcon} style={styles.icon} />
+        <Text style={styles.buttonText}>Görsel Seç</Text>
+      </TouchableOpacity>
 
       {image && (
         <View style={styles.imageContainer}>
@@ -136,10 +159,22 @@ const AddScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <TouchableOpacity style={styles.optionButton} onPress={() => { pickImage('gallery'); setModalVisible(false); }}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                pickImage("gallery");
+                setModalVisible(false);
+              }}
+            >
               <Text style={styles.optionText}>Galeriden Seç</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={() => { pickImage('camera'); setModalVisible(false); }}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                pickImage("camera");
+                setModalVisible(false);
+              }}
+            >
               <Text style={styles.optionText}>Kamera ile Çek</Text>
             </TouchableOpacity>
           </View>
@@ -175,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#fff",
-    marginTop:50
+    marginTop: 50,
   },
   inputContainer: {
     padding: 10,
@@ -205,12 +240,12 @@ const styles = StyleSheet.create({
   optionButton: {
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: "#ccc",
   },
   optionText: {
     fontSize: 16,
-    color: 'black',
-    textAlign: 'center',
+    color: "black",
+    textAlign: "center",
   },
   icon: {
     width: 24,
@@ -235,7 +270,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "cover",
     borderRadius: 10,
-    marginBottom:20
+    marginBottom: 20,
   },
   deleteButton: {
     position: "absolute",

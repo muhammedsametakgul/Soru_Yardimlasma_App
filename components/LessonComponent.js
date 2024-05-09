@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  StyleSheet,
+} from "react-native";
 
-const LessonComponent = () => {
-  const [selectedLesson, setSelectedLesson] = useState('');
-  const [selectedTopic, setSelectedTopic] = useState('');
+const LessonComponent = ({
+  onSelectLessonAndTopic,
+}) => {
+  const [selectedLesson, setSelectedLesson] = useState("");
+  const [selectedTopic, setSelectedTopic] = useState("");
   const [isLessonModalVisible, setIsLessonModalVisible] = useState(false);
   const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
 
   const lessons = [
-    { id: 1, name: 'Matematik' },
-    { id: 2, name: 'Türkçe' },
-    { id: 3, name: 'Tarih' },
+    { id: 1, name: "Matematik" },
+    { id: 2, name: "Türkçe" },
+    { id: 3, name: "Tarih" },
   ];
 
   const topics = {
-    Matematik: ['Lineer cebir', 'Geometri', 'Birinci Dereceden Denklemler'],
-    Türkçe: ['Ünlü Düşmesi', 'Anlatım Bozuklukları', 'Paragraf'],
-    Tarih: ['Osmanlı Kuruluş', 'Osmanlı Yükseliş', 'Osmanlı Çöküş'],
+    Matematik: ["Lineer cebir", "Geometri", "Birinci Dereceden Denklemler"],
+    Türkçe: ["Ünlü Düşmesi", "Anlatım Bozuklukları", "Paragraf"],
+    Tarih: ["Osmanlı Kuruluş", "Osmanlı Yükseliş", "Osmanlı Çöküş"],
   };
+
+ 
 
   const handleLessonPress = () => {
     setIsLessonModalVisible(true);
@@ -26,7 +37,7 @@ const LessonComponent = () => {
   const handleLessonSelect = (lesson) => {
     setSelectedLesson(lesson);
     setIsLessonModalVisible(false);
-    setSelectedTopic('');
+    setSelectedTopic("");
   };
 
   const handleTopicPress = () => {
@@ -38,16 +49,21 @@ const LessonComponent = () => {
   const handleTopicSelect = (topic) => {
     setSelectedTopic(topic);
     setIsTopicModalVisible(false);
+    onSelectLessonAndTopic(selectedLesson, topic);
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={handleLessonPress}>
-        <Text style={styles.buttonText}>Ders : {selectedLesson || 'Ders Seçiniz'}</Text>
+        <Text style={styles.buttonText}>
+          Ders : {selectedLesson || "Ders Seçiniz"}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={handleTopicPress}>
-        <Text style={styles.buttonText}>Konu : {selectedTopic || 'Konu Seçiniz'}</Text>
+        <Text style={styles.buttonText}>
+          Konu : {selectedTopic || "Konu Seçiniz"}
+        </Text>
       </TouchableOpacity>
 
       <Modal
@@ -93,28 +109,28 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: 10,
-    backgroundColor: '#3498db',
+    backgroundColor: "#3498db",
     padding: 8,
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 14, // küçültüldü
-    fontWeight: 'bold',
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "bold",
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalItem: {
     padding: 10,
     fontSize: 18,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    width: '100%',
-    textAlign: 'center',
+    borderBottomColor: "#ccc",
+    width: "100%",
+    textAlign: "center",
   },
 });
 
