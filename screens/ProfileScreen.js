@@ -31,30 +31,39 @@ const ProfileScreen = () => {
   const handleSaveChanges = async () => {
     try {
       const currentUser = auth.currentUser;
-
+  
       if (!currentUser) {
         navigation.navigate("SignIn");
         return;
       }
-
+  
       if (newUsername.length > 0) {
         await updateProfile(currentUser, { displayName: newUsername });
         setUsername(newUsername);
         setNewUserName("");
         await currentUser.reload();
       }
-
+  
       if (newEmail.length > 0 && newEmail !== email) {
-        await updateEmail(currentUser, newEmail);
-        setEmail(newEmail);
-        setNewEmail("");
+        try {
+          await updateEmail(currentUser, newEmail);
+          setEmail(newEmail);
+          setNewEmail("");
+        } catch (emailError) {
+          if (emailError.code === "auth/email-already-in-use") {
+            Alert.alert("Hata", "Bu e-posta adresi zaten kullanılıyor.");
+          } else {
+            throw emailError; // Diğer hataları yeniden fırlat
+          }
+        }
       }
-
+  
       setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
     }
   };
+  
 
   const handleSendVerificationEmail = async () => {
     try {
