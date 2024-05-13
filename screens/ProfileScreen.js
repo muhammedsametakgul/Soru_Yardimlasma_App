@@ -1,33 +1,9 @@
 import React, { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Modal,
-  TextInput,
-  Button,
-  Alert,
-  Share,
-} from "react-native";
-import {
-  Avatar,
-  Title,
-  Caption,
-  Text,
-  TouchableRipple,
-} from "react-native-paper";
-
+import { View, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TextInput, Text, Button, Alert, Share } from "react-native";
+import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import HomeScreen from "./HomeScreen";
 import { useNavigation } from "@react-navigation/native";
-import {
-  signOut,
-  updateProfile,
-  updateEmail,
-  updatePassword,
-  sendEmailVerification,
-} from "firebase/auth"; 
+import { signOut, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 
 const ProfileScreen = () => {
@@ -49,43 +25,36 @@ const ProfileScreen = () => {
   };
 
   const navigateToMyQuestions = () => {
-    navigation.navigate('MyQuestions'); 
-  };
-
-  const navigateToChangePassword = () => {
-    navigation.navigate('ChangePassword'); 
+    navigation.navigate("MyQuestions");
   };
 
   const handleSaveChanges = async () => {
     try {
       const currentUser = auth.currentUser;
-  
+
       if (!currentUser) {
-        navigation.navigate('SignIn');
+        navigation.navigate("SignIn");
         return;
       }
-  
+
       if (newUsername.length > 0) {
         await updateProfile(currentUser, { displayName: newUsername });
-        setUsername(newUsername); 
-        setNewUserName(""); 
+        setUsername(newUsername);
+        setNewUserName("");
         await currentUser.reload();
       }
-      
+
       if (newEmail.length > 0 && newEmail !== email) {
-        await currentUser.reauthenticateWithCredential(reauthenticationCredential);
         await updateEmail(currentUser, newEmail);
-        console.log("Email Updated");
         setEmail(newEmail);
-        setNewEmail(""); 
+        setNewEmail("");
       }
-  
+
       setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
     }
   };
-  
 
   const handleSendVerificationEmail = async () => {
     try {
@@ -99,78 +68,44 @@ const ProfileScreen = () => {
   const handleShareApp = async () => {
     try {
       const result = await Share.share({
-        message: 'Hadi sen de gel bu uygulamaya: https://github.com/muhammedsametakgul/Soru_Yardimlasma_App',
+        message:
+          "Hadi sen de gel bu uygulamaya: https://github.com/muhammedsametakgul/Soru_Yardimlasma_App",
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
-          console.log('Paylaşım gerçekleştirildi:', result.activityType);
+          console.log("Paylaşım gerçekleştirildi:", result.activityType);
         } else {
-          console.log('Paylaşım gerçekleştirildi');
+          console.log("Paylaşım gerçekleştirildi");
         }
       } else if (result.action === Share.dismissedAction) {
-        console.log('Paylaşım iptal edildi');
+        console.log("Paylaşım iptal edildi");
       }
     } catch (error) {
-      console.error('Paylaşma hatası:', error.message);
+      console.error("Paylaşma hatası:", error.message);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.userInfoSection}>
-        <View style={{ flexDirection: "row", marginTop: 15 }}>
-          <Avatar.Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            }}
-            size={80}
-          />
-          <View style={{ marginLeft: 10 }}>
-            <Title
-              style={[
-                styles.title,
-                {
-                  marginTop: 15,
-                  marginBottom: 5,
-                },
-              ]}
-            >
-              {username}
-            </Title>
-            <Caption style={styles.caption}>{email}</Caption>
-          </View>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Icon
-              name="pencil"
-              color="#777777"
-              size={20}
-              style={{ marginLeft: 10, marginTop: 20 }}
-            />
-          </TouchableOpacity>
+      <View style={styles.userInfoContainer}>
+        <Avatar.Image
+          source={{
+            uri: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          }}
+          size={100}
+          style={styles.avatar}
+        />
+        <View style={styles.userInfoText}>
+          <Title style={styles.title}>{username}</Title>
+          <Caption style={styles.caption}>{email}</Caption>
         </View>
-      </View>
-
-      <View style={styles.infoBoxWrapper}>
-        <View
-          style={[
-            styles.infoBox,
-            {
-              borderRightColor: "#dddddd",
-              borderRightWidth: 1,
-            },
-          ]}
-        >
-          <Title>3</Title>
-          <Caption>Sorulan Soru Sayısı</Caption>
-        </View>
-        <View style={styles.infoBox}>
-          <Title>12</Title>
-          <Caption>Çözülen Soru Sayısı</Caption>
-        </View>
+        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.editButton}>
+          <Icon name="pencil" color="#000" size={18} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() =>navigateToMyQuestions()}>
+        <TouchableRipple onPress={() => navigateToMyQuestions()}>
           <View style={styles.menuItem}>
             <Icon name="bookmark" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Sorduğum Sorular</Text>
@@ -183,28 +118,32 @@ const ProfileScreen = () => {
             <Text style={styles.menuItemText}>Arkadaşlarınla Paylaş</Text>
           </View>
         </TouchableRipple>
+        
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Destek Ol</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {navigateToChangePassword()}}>
+        
+        <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="account-details" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Şifre Değiştir</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={handleSignOut}>
-          <View style={styles.menuItem}>
-            <Icon name="account-circle" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Ayarlar</Text>
-          </View>
-        </TouchableRipple>
+
         <TouchableRipple onPress={handleSendVerificationEmail}>
           <View style={styles.menuItem}>
             <Icon name="email" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Doğrulama E-postası Gönder</Text>
+          </View>
+        </TouchableRipple>
+        
+        <TouchableRipple onPress={handleSignOut}>
+          <View style={styles.menuItem}>
+            <Icon name="logout" color="#FF6347" size={25} />
+            <Text style={styles.menuItemText}>Çıkış Yap</Text>
           </View>
         </TouchableRipple>
       </View>
@@ -224,17 +163,21 @@ const ProfileScreen = () => {
               style={styles.input}
               placeholder="Kullanıcı Adı"
               onChangeText={(text) => setNewUserName(text)}
-              value={newUsername} 
+              value={newUsername}
             />
             <TextInput
               style={styles.input}
               placeholder="Yeni E-posta"
               onChangeText={(text) => setNewEmail(text)}
-              value={newEmail} 
+              value={newEmail}
             />
-          
-            <Button title="Kaydet" onPress={handleSaveChanges} />
-            <Button title="İptal" onPress={() => setModalVisible(false)} />
+
+            <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+              <Text style={styles.buttonText}>Kaydet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.buttonText}>İptal</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -245,37 +188,41 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:50
+    marginTop: 50,
+    backgroundColor: "#ffffff",
   },
-  userInfoSection: {
-    paddingHorizontal: 30,
-    marginBottom: 25,
+  userInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: "#e0e0e0",
+    backgroundColor: "#FF6347",
+  },
+  userInfoText: {
+    marginLeft: 15,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#ffffff",
   },
   caption: {
-    fontSize: 12,
-    lineHeight: 14,
+    fontSize: 14,
+    lineHeight: 20,
     fontWeight: "500",
+    color: "#ffffff",
   },
-  row: {
-    flexDirection: "row",
-    marginBottom: 10,
+  avatar: {
+    backgroundColor: "#ffffff",
+    marginTop:5
   },
-  infoBoxWrapper: {
-    borderBottomColor: "#dddddd",
-    borderBottomWidth: 1,
-    borderTopColor: "#dddddd",
-    borderTopWidth: 1,
-    flexDirection: "row",
-    height: 100,
-  },
-  infoBox: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
+  editButton: {
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    padding: 5,
+    marginLeft:15
   },
   menuWrapper: {
     marginTop: 20,
@@ -284,6 +231,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 15,
     paddingHorizontal: 30,
+    borderBottomWidth: 1,
+    borderColor: "#e0e0e0",
   },
   menuItemText: {
     color: "#777777",
@@ -299,7 +248,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
     padding: 20,
     borderRadius: 10,
     elevation: 5,
@@ -315,6 +264,24 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+  },
+  saveButton: {
+    backgroundColor: "#FF6347",
+    borderRadius: 20,
+    paddingVertical: 12,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: "#777777",
+    borderRadius: 20,
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
