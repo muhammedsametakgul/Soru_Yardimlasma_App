@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  Modal,
 } from "react-native";
 import CommentBox from "../components/CommentBox";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -17,6 +18,8 @@ import { createComment } from "../service/CreateComments";
 import { getCommentsForQuestion } from "../service/GetComments";
 import { useRoute } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker";
+import LottieView from "lottie-react-native";
+const loadingAnimation = require("../assets/animations/loading.json");
 
 const CommentScreen = () => {
   const [comments, setComments] = useState([]);
@@ -24,6 +27,8 @@ const CommentScreen = () => {
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false); 
   const route = useRoute();
 
   useEffect(() => {
@@ -83,6 +88,8 @@ const CommentScreen = () => {
         throw new Error("Question ID not found.");
       }
   
+-      setIsLoading(true);
+  
       const addedCommentRef = await createComment(
         questionId,
         commentText,
@@ -91,8 +98,13 @@ const CommentScreen = () => {
   
       setSelectedImage(null);
       setCommentText("");
+
+      setIsLoading(false);
+      fetchData();
     } catch (error) {
       console.error("Error creating comment:", error);
+
+      setIsLoading(false);
     }
   };
 
@@ -155,6 +167,26 @@ const CommentScreen = () => {
           </View>
         </View>
       )}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isLoading} 
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <LottieView
+              source={loadingAnimation}
+              autoPlay
+              loop
+              style={{ width: 200, height: 200 }}
+            />
+            <Text style={styles.modalText}>Yükleniyor...</Text>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -217,6 +249,23 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginLeft: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 16,
+    marginTop: 10,
   },
 });
 
