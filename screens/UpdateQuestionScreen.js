@@ -12,6 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import LottieView from "lottie-react-native"; 
+import { useNavigation } from '@react-navigation/native'; // Navigation hook
 
 import {
   uploadImageAndCreateQuestion
@@ -29,9 +30,9 @@ const UpdateQuestionScreen = ({ route }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const { questionId } = route.params;
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigation = useNavigation(); // Navigation hook
+  const { questionId } = route.params;
 
   useEffect(() => {
     (async () => {
@@ -100,6 +101,7 @@ const UpdateQuestionScreen = ({ route }) => {
     setIsLoading(true);
     await updateQuestion(questionId, text, image);
     setIsLoading(false);
+    navigation.navigate('MyQuestions'); // Navigate to MyQuestions screen
   };
 
   return (
