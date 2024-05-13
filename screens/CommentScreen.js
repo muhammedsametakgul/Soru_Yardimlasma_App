@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -16,10 +16,11 @@ import CommentBox from "../components/CommentBox";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { createComment } from "../service/CreateComments";
 import { getCommentsForQuestion } from "../service/GetComments";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import LottieView from "lottie-react-native";
 const loadingAnimation = require("../assets/animations/loading.json");
+const nocomments = require("../assets/images/nocomments.png");
 
 const CommentScreen = () => {
   const [comments, setComments] = useState([]);
@@ -27,14 +28,13 @@ const CommentScreen = () => {
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false); 
-  const [isLoading, setIsLoading] = useState(false); 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const route = useRoute();
 
   useEffect(() => {
     fetchData();
   }, []);
-
 
   const fetchData = async () => {
     const questionId = route.params?.questionId;
@@ -54,48 +54,47 @@ const CommentScreen = () => {
     setRefreshing(true);
     fetchData();
   };
-  
 
   const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (permissionResult.granted === false) {
       alert("Galeriye erişim izni gerekiyor!");
       return;
     }
-  
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
-  
-    
+
     if (!result.cancelled) {
-      setSelectedImage(result.assets[0].uri); 
+      setSelectedImage(result.assets[0].uri);
     }
   };
   const handleAddImage = async () => {
-    pickImage(); 
-    console.log("Selected Image URL:", result.assets[0].uri); 
+    pickImage();
+    console.log("Selected Image URL:", result.assets[0].uri);
   };
 
   const handleCommentSubmit = async () => {
     console.log("Submit Comment:", commentText);
     try {
-      const questionId = route.params?.questionId; 
+      const questionId = route.params?.questionId;
       if (!questionId) {
         throw new Error("Question ID not found.");
       }
-  
--      setIsLoading(true);
-  
+
+      -setIsLoading(true);
+
       const addedCommentRef = await createComment(
         questionId,
         commentText,
-        selectedImage 
+        selectedImage
       );
-  
+
       setSelectedImage(null);
       setCommentText("");
 
@@ -124,8 +123,10 @@ const CommentScreen = () => {
           >
             {comments.length === 0 ? (
               <View style={styles.noCommentsContainer}>
-                <Text style={styles.noCommentsText}>Yorum Yok</Text>
-              </View>
+  <Image source={nocomments} style={styles.noCommentsImage} />
+  <Text style={styles.noCommentsText}>Henüz cevap yok</Text>
+</View>
+
             ) : (
               comments.map((comment, index) => (
                 <View key={index} style={styles.profileWrapper}>
@@ -155,7 +156,10 @@ const CommentScreen = () => {
                 <Icon name="camera" size={20} color="#FFFFFF" />
               </TouchableOpacity>
               {selectedImage && (
-                <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
+                <Image
+                  source={{ uri: selectedImage }}
+                  style={styles.selectedImage}
+                />
               )}
               <TouchableOpacity
                 style={styles.submitButton}
@@ -170,7 +174,7 @@ const CommentScreen = () => {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={isLoading} 
+        visible={isLoading}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
@@ -267,6 +271,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
   },
+  noCommentsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: "70%"
+  },
+  noCommentsText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#666666",
+    textAlign: "center", 
+  },
+  
+  noCommentsImage: {
+    width: 150, 
+    height: 150, 
+  },
+  
 });
 
 export default CommentScreen;
