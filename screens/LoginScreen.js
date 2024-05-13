@@ -49,6 +49,7 @@ const LoginScreen = () => {
           onChangeText={(username) => setUsername(username)}
           autoCorrect={false}
           autoCapitalize="none"
+          keyboardType="email-address"
         />
         <TextInput
           style={styles.input}

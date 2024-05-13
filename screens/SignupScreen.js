@@ -36,6 +36,7 @@ const SignupScreen = () => {
           onChangeText={setUsername}
           autoCorrect={false}
           autoCapitalize='none'
+          keyboardType="email-address" 
         />
         <TextInput
           style={styles.input}

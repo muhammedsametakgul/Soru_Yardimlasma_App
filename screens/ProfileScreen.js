@@ -1,9 +1,25 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, StyleSheet, SafeAreaView, Modal, TextInput, Text, Button, Alert, Share } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  Modal,
+  TextInput,
+  Text,
+  Button,
+  Alert,
+  Share,
+} from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import { signOut, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
+import {
+  signOut,
+  updateProfile,
+  updateEmail,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
 
 const ProfileScreen = () => {
@@ -31,39 +47,30 @@ const ProfileScreen = () => {
   const handleSaveChanges = async () => {
     try {
       const currentUser = auth.currentUser;
-  
+
       if (!currentUser) {
         navigation.navigate("SignIn");
         return;
       }
-  
+
       if (newUsername.length > 0) {
         await updateProfile(currentUser, { displayName: newUsername });
         setUsername(newUsername);
         setNewUserName("");
         await currentUser.reload();
       }
-  
+
       if (newEmail.length > 0 && newEmail !== email) {
-        try {
-          await updateEmail(currentUser, newEmail);
-          setEmail(newEmail);
-          setNewEmail("");
-        } catch (emailError) {
-          if (emailError.code === "auth/email-already-in-use") {
-            Alert.alert("Hata", "Bu e-posta adresi zaten kullanılıyor.");
-          } else {
-            throw emailError; // Diğer hataları yeniden fırlat
-          }
-        }
+        await updateEmail(currentUser, newEmail);
+        setEmail(newEmail);
+        setNewEmail("");
       }
-  
+
       setModalVisible(false);
     } catch (error) {
       console.error("Bilgileri güncelleme hatası:", error);
     }
   };
-  
 
   const handleSendVerificationEmail = async () => {
     try {
@@ -108,7 +115,10 @@ const ProfileScreen = () => {
           <Title style={styles.title}>{username}</Title>
           <Caption style={styles.caption}>{email}</Caption>
         </View>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.editButton}>
+        <TouchableOpacity
+          onPress={() => setModalVisible(true)}
+          style={styles.editButton}
+        >
           <Icon name="pencil" color="#000" size={18} />
         </TouchableOpacity>
       </View>
@@ -127,14 +137,14 @@ const ProfileScreen = () => {
             <Text style={styles.menuItemText}>Arkadaşlarınla Paylaş</Text>
           </View>
         </TouchableRipple>
-        
+
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Destek Ol</Text>
           </View>
         </TouchableRipple>
-        
+
         <TouchableRipple onPress={() => {}}>
           <View style={styles.menuItem}>
             <Icon name="account-details" color="#FF6347" size={25} />
@@ -148,7 +158,7 @@ const ProfileScreen = () => {
             <Text style={styles.menuItemText}>Doğrulama E-postası Gönder</Text>
           </View>
         </TouchableRipple>
-        
+
         <TouchableRipple onPress={handleSignOut}>
           <View style={styles.menuItem}>
             <Icon name="logout" color="#FF6347" size={25} />
@@ -179,12 +189,20 @@ const ProfileScreen = () => {
               placeholder="Yeni E-posta"
               onChangeText={(text) => setNewEmail(text)}
               value={newEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
 
-            <TouchableOpacity style={styles.saveButton} onPress={handleSaveChanges}>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={handleSaveChanges}
+            >
               <Text style={styles.buttonText}>Kaydet</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity
+              style={styles.cancelButton}
+              onPress={() => setModalVisible(false)}
+            >
               <Text style={styles.buttonText}>İptal</Text>
             </TouchableOpacity>
           </View>
@@ -225,13 +243,13 @@ const styles = StyleSheet.create({
   },
   avatar: {
     backgroundColor: "#ffffff",
-    marginTop:5
+    marginTop: 5,
   },
   editButton: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 5,
-    marginLeft:15
+    marginLeft: 15,
   },
   menuWrapper: {
     marginTop: 20,
@@ -261,6 +279,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     elevation: 5,
+    width:300
   },
   modalTitle: {
     fontSize: 20,
