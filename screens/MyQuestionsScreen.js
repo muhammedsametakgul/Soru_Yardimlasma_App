@@ -76,7 +76,7 @@ const MyQuestionsScreen = () => {
                   imageSource={{ uri: question.imageUrl }}
                   questionId={question.id}
                   date={question.createdAt.toDate().toLocaleDateString()}
-                  onUpdatePress={() => handleUpdatePress(question.id)} // Güncelleme işlevini çağırırken soru ID'sini ile
+                  onUpdatePress={() => handleUpdatePress(question.id)} 
                 />
               </View>
             ))

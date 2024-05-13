@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   Alert,
-  ActivityIndicator,
   Modal,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -19,6 +18,7 @@ import {
 } from "../service/createQuestions";
 import getQuestionByQuestionId from "../service/getQuestionByQuestionId";
 import updateQuestion from "../service/updateQuestion"; 
+import { Colors } from "../utils/Colors";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const cameraIcon = require("../assets/images/galleryicon.jpg");
@@ -27,13 +27,11 @@ const loadingAnimation = require("../assets/animations/loading.json");
 
 const UpdateQuestionScreen = ({ route }) => {
   const [text, setText] = useState("");
-  const [hasGalleryPermissions, setGalleryPermissions] = useState(null);
   const [image, setImage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [userUUID, setUserUUID] = useState(null); 
-  const [userEmail, setUserEmail] = useState(null); 
   const [modalVisible, setModalVisible] = useState(false);
   const { questionId } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     (async () => {
@@ -90,7 +88,7 @@ const UpdateQuestionScreen = ({ route }) => {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
   
@@ -117,16 +115,13 @@ const UpdateQuestionScreen = ({ route }) => {
         />
       </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={pickImage}>
-          <Image source={galleryIcon} style={styles.icon} />
-          <Text style={styles.buttonText}>Görsel Seç</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={takePhoto}>
-          <Image source={cameraIcon} style={styles.icon} />
-          <Text style={styles.buttonText}>Kamera ile Çek</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={[styles.button, { marginBottom: 20 }]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Image source={galleryIcon} style={styles.icon} />
+        <Text style={styles.buttonText}>Görsel Seç</Text>
+      </TouchableOpacity>
 
       {image && (
         <View style={styles.imageContainer}>
@@ -140,6 +135,36 @@ const UpdateQuestionScreen = ({ route }) => {
       <TouchableOpacity style={styles.button} onPress={handleUpdatePress}>
         <Text style={styles.buttonText}>Güncelle</Text>
       </TouchableOpacity>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                pickImage("gallery");
+                setModalVisible(false);
+              }}
+            >
+              <Text style={styles.optionText}>Galeriden Seç</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                takePhoto();
+                setModalVisible(false);
+              }}
+            >
+              <Text style={styles.optionText}>Kamera ile Çek</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <Modal
         animationType="slide"
@@ -170,11 +195,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: "#fff",
-    marginTop: 50
+    marginTop: 50,
   },
   inputContainer: {
     padding: 10,
     backgroundColor: "#fff",
+    color: Colors.textColor,
+    fontWeight:"bold",
     width: "98%",
   },
   buttonContainer: {
@@ -191,11 +218,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "black",
+    backgroundColor : Colors.buttonColor,
   },
   buttonText: {
     fontSize: 16,
     color: "black",
     marginLeft: 10,
+  },
+  optionButton: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingVertical :8
+  },
+  optionText: {
+    fontSize: 16,
+    color: "black",
+    textAlign: "center",
   },
   icon: {
     width: 24,
@@ -220,6 +258,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "cover",
     borderRadius: 10,
+    marginBottom: 20,
   },
   deleteButton: {
     position: "absolute",
@@ -247,5 +286,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-
 export default UpdateQuestionScreen;
