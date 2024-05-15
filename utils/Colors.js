@@ -22,6 +22,8 @@ export const Colors = {
 
     //Lesson Component
     listBoxColor : '#F59D00',
-    modalBackgroungColor : '#ffffff'
+    modalBackgroungColor : '#ffffff',
+
+    buttonDefault: '#000'
   };
   

@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: "10%",
-    backgroundColor: "#0000ff",
+    backgroundColor: Colors.buttonLogin,
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   modalButton: {
-    backgroundColor: "#0000ff",
+    backgroundColor: Colors.buttonLogin,
     padding: 10,
     borderRadius: 5,
     marginHorizontal: 10,
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   clearButton: {
-    backgroundColor: "#ff0000",
+    backgroundColor: Colors.buttonDefault,
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
@@ -375,7 +375,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   filterButton: {
-    backgroundColor: "#00FF00",
+    backgroundColor: Colors.buttonDefault,
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
