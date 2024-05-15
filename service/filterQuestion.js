@@ -1,5 +1,3 @@
-// filterQuestion.js
-
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
 import { FIRESTORE_DB } from "../config/firebaseConfig";
 
