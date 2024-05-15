@@ -21,6 +21,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "../config/firebaseConfig";
+import { Colors } from "../utils/Colors";
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -43,6 +44,10 @@ const ProfileScreen = () => {
   const navigateToMyQuestions = () => {
     navigation.navigate("MyQuestions");
   };
+
+  const navigateToChangePassword = () =>{
+    navigation.navigate("ChangePassword");
+  }
 
   const handleSaveChanges = async () => {
     try {
@@ -145,7 +150,7 @@ const ProfileScreen = () => {
           </View>
         </TouchableRipple>
 
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={navigateToChangePassword}>
           <View style={styles.menuItem}>
             <Icon name="account-details" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Şifre Değiştir</Text>
@@ -225,7 +230,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderColor: "#e0e0e0",
-    backgroundColor: "#FF6347",
+    backgroundColor: Colors.mainColor
   },
   userInfoText: {
     marginLeft: 15,

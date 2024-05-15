@@ -12,6 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../config/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Colors } from "../utils/Colors";
 const google = require("../assets/images/google.png");
 
 const LoginScreen = () => {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     marginBottom: 10, 
   },
   button: {
-    backgroundColor: "orange",
+    backgroundColor: Colors.buttonColor,
     height: 45,
     borderColor: "gray",
     borderWidth: 1,

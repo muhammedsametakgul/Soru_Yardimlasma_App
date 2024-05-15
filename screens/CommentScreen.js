@@ -19,6 +19,7 @@ import { getCommentsForQuestion } from "../service/GetComments";
 import { useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import LottieView from "lottie-react-native";
+import { Colors } from "../utils/Colors";
 const loadingAnimation = require("../assets/animations/loading.json");
 const nocomments = require("../assets/images/nocomments.png");
 
@@ -236,12 +237,12 @@ const styles = StyleSheet.create({
     maxHeight: 120,
   },
   addImageButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.buttonColor,
     borderRadius: 5,
     padding: 10,
   },
   submitButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.buttonColor,
     borderRadius: 5,
     padding: 10,
   },

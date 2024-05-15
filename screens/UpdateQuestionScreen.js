@@ -12,7 +12,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import LottieView from "lottie-react-native"; 
-import { useNavigation } from '@react-navigation/native'; // Navigation hook
+import { useNavigation } from '@react-navigation/native'; 
 
 import {
   uploadImageAndCreateQuestion
@@ -101,7 +101,7 @@ const UpdateQuestionScreen = ({ route }) => {
     setIsLoading(true);
     await updateQuestion(questionId, text, image);
     setIsLoading(false);
-    navigation.navigate('MyQuestions'); // Navigate to MyQuestions screen
+    navigation.navigate('MyQuestions'); 
   };
 
   return (

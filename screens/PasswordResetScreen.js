@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { auth } from "../config/firebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { Colors } from "../utils/Colors";
 
 const PasswordResetScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: Colors.buttonColor,
     padding: 10,
     borderRadius: 5,
   },

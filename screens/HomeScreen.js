@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     bottom: "10%",
-    backgroundColor: Colors.buttonLogin,
+    backgroundColor: Colors.buttonColor,
     width: 60,
     height: 60,
     borderRadius: 30,

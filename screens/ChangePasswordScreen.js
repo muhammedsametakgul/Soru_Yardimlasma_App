@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { auth } from '../config/firebaseConfig';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
+import { Colors } from '../utils/Colors';
 
 
 const ChangePasswordScreen = () => {
@@ -64,7 +65,7 @@ const ChangePasswordScreen = () => {
         value={confirmNewPassword}
         onChangeText={(confirmNewPassword) => setConfirmNewPassword(confirmNewPassword)}
       />
-      <Button title="Şifreyi Değiştir" onPress={handleChangePassword} />
+      <Button title="Şifreyi Değiştir" onPress={handleChangePassword} style={styles.buttonChangePassword} />
     </View>
   );
 };
@@ -82,6 +83,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+  buttonChangePassword:{
+    backgroundColor: Colors.buttonColor
+  }
 });
 
 export default ChangePasswordScreen;
