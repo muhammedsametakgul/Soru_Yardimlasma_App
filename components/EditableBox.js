@@ -4,15 +4,18 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
+  TouchableOpacity,Modal
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
 import { FIRESTORE_DB } from "../config/firebaseConfig";
 import { deleteQuestion } from "../service/deleteQuestion";
+import { Colors } from "../utils/Colors";
 
-const EditableBox = ({ name, description, imageSource, questionId, date }) => {
+
+const EditableBox = ({ name, description, imageSource, questionId, date,lesson,subject }) => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const handleImagePress = () => {
@@ -27,7 +30,7 @@ const EditableBox = ({ name, description, imageSource, questionId, date }) => {
   };
 
   const handleUpdatePress = () => {
-    setMenuVisible(false); // Menüyü kapat
+    setMenuVisible(false); 
     navigation.navigate('UpdateQuestion', { questionId: questionId });
 };
   
@@ -57,15 +60,21 @@ const EditableBox = ({ name, description, imageSource, questionId, date }) => {
         <Text style={styles.profileName}>{name}</Text>
         <Text style={styles.date}>{date}</Text> 
       </View>
+      <View style={styles.bodyStyle}>
       <Text style={styles.description}>{description}</Text>
       {imageSource && imageSource.uri !== null ? (
         <TouchableOpacity onPress={handleImagePress}>
           <Image source={imageSource} style={styles.image} />
         </TouchableOpacity>
       ) : null}
+      </View>
+      <View style={styles.lessonSubjectContainer}>
+        <Text style={styles.lessonSubject}>{lesson}</Text>
+        <Text style={styles.lessonSubject}>{subject}</Text>
+      </View>
       <TouchableOpacity style={styles.commentsButton} onPress={handleCommentsPress}>
-        <Icon name="comment" size={20} color="#FFFFFF" />
-        <Text style={styles.commentsButtonText}>Yorumlara Git</Text>
+        <Icon name="comment" size={20} color="#FFF" />
+        <Text style={styles.commentsButtonText}>Cevaplara Git</Text>
       </TouchableOpacity>
       {menuVisible && (
         <View style={styles.dropdownMenu}>
@@ -79,12 +88,19 @@ const EditableBox = ({ name, description, imageSource, questionId, date }) => {
             <Text style={styles.dropdownMenuItemText}>İptal</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )}    
+      
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
+  menuButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     width: "105%",
@@ -97,13 +113,6 @@ const styles = StyleSheet.create({
     borderTopColor: "#CCCCCC",
     borderBottomColor: "#CCCCCC",
     borderRadius: 10, 
-    position: 'relative', 
-  },
-  menuButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    zIndex: 1,
   },
   profileHeader: {
     flexDirection: "row",
@@ -119,14 +128,12 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
     color: "#777",
-    position: "absolute",
-    bottom: 10,
-    right: 10,
   },
   description: {
     marginVertical: 10,
     fontSize: 14,
     color: "#555555",
+    fontWeight:"bold"
   },
   image: {
     width: '100%',
@@ -134,22 +141,61 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#CCCCCC",
+    marginBottom:20
   },
   commentsButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
     flexDirection: "row", 
-    alignSelf: "flex-start",
-    marginTop: 10,
-    paddingVertical: 4, 
-    paddingHorizontal: 8, 
-    backgroundColor: "#007AFF",
+    paddingVertical: 8, 
+    paddingHorizontal: 12, 
+    backgroundColor: Colors.buttonColor,
     borderRadius: 16,
     alignItems: "center",
-    justifyContent: "center",
   },
+  
   commentsButtonText: {
     color: "#FFF",
     fontWeight: "bold",
     marginLeft: 5, 
+  },
+  lessonSubjectContainer: {
+    alignItems: "flex-start",
+  },
+  lessonSubject: {
+    fontSize: 12,
+    color: "#777",
+    fontStyle: "italic",
+  },
+  
+  
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  modalCloseButton: {
+    position: "absolute",
+    top: 30,
+    right: 20,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 5,
+  },
+  modalCloseText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333333",
+  },
+  modalImage: {
+    width: "90%",
+    height: "90%",
+    borderRadius: 10,
+  },
+  bodyStyle:{
+    marginBottom:10
   },
   dropdownMenu: {
     position: 'absolute',

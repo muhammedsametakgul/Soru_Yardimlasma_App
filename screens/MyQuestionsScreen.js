@@ -77,6 +77,8 @@ const MyQuestionsScreen = () => {
                   questionId={question.id}
                   date={question.createdAt.toDate().toLocaleDateString()}
                   onUpdatePress={() => handleUpdatePress(question.id)} 
+                  lesson={question.lesson}
+                  subject={question.subject}
                 />
               </View>
             ))

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   lessonSubject: {
-    fontSize: 12,
+    fontSize: 10,
     color: "#777",
     fontStyle: "italic",
   },
