@@ -132,6 +132,8 @@ const HomeScreen = () => {
                 imageSource={{ uri: question.imageUrl }}
                 questionId={question.id}
                 date={question.createdAt.toDate().toLocaleDateString()}
+                lesson={question.lesson}
+                subject={question.subject}
               />
             </View>
           ))}

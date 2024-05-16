@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Modal } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from '@react-navigation/native';
+import { Colors } from "../utils/Colors";
 
-const ProfileBox = ({ name, description, imageSource, questionId, date }) => {
+const ProfileBox = ({ name, description, imageSource, questionId, date, lesson, subject }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -28,15 +22,22 @@ const ProfileBox = ({ name, description, imageSource, questionId, date }) => {
         <Text style={styles.profileName}>{name}</Text>
         <Text style={styles.date}>{date}</Text> 
       </View>
+      <View style={styles.bodyStyle}>
       <Text style={styles.description}>{description}</Text>
       {imageSource && imageSource.uri !== null ? (
         <TouchableOpacity onPress={handleImagePress}>
           <Image source={imageSource} style={styles.image} />
         </TouchableOpacity>
       ) : null}
+      </View>
+      <View style={styles.lessonSubjectContainer}>
+        <Text style={styles.lessonSubject}>{lesson}</Text>
+        <Text style={styles.lessonSubject}>{subject}</Text>
+
+      </View>
       <TouchableOpacity style={styles.commentsButton} onPress={handleCommentsPress}>
-        <Icon name="comment" size={20} color="#FFFFFF" />
-        <Text style={styles.commentsButtonText}>Yorumlara Git</Text>
+        <Icon name="comment" size={20} color="#FFF" />
+        <Text style={styles.commentsButtonText}>Cevaplara Git</Text>
       </TouchableOpacity>
       <Modal
         visible={modalVisible}
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontSize: 14,
     color: "#555555",
+    fontWeight:"bold"
   },
   image: {
     width: '100%',
@@ -104,23 +106,35 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#CCCCCC",
+    marginBottom:20
   },
   commentsButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
     flexDirection: "row", 
-    alignSelf: "flex-start",
-    marginTop: 10,
-    paddingVertical: 4, 
-    paddingHorizontal: 8, 
-    backgroundColor: "#007AFF",
+    paddingVertical: 8, 
+    paddingHorizontal: 12, 
+    backgroundColor: Colors.buttonColor,
     borderRadius: 16,
     alignItems: "center",
-    justifyContent: "center",
   },
+  
   commentsButtonText: {
     color: "#FFF",
     fontWeight: "bold",
     marginLeft: 5, 
   },
+  lessonSubjectContainer: {
+    alignItems: "flex-start",
+  },
+  lessonSubject: {
+    fontSize: 12,
+    color: "#777",
+    fontStyle: "italic",
+  },
+  
+  
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -145,6 +159,9 @@ const styles = StyleSheet.create({
     height: "90%",
     borderRadius: 10,
   },
+  bodyStyle:{
+    marginBottom:10
+  }
 });
 
 export default ProfileBox;
