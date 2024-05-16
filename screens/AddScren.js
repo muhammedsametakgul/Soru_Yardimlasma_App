@@ -1,5 +1,3 @@
-// AddScreen.js dosyasında
-
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -23,6 +21,7 @@ import { Colors } from "../utils/Colors";
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
 const loadingAnimation = require("../assets/animations/loading.json");
+import { Ionicons } from "@expo/vector-icons";
 
 const AddScreen = () => {
   const [text, setText] = useState("");
@@ -34,7 +33,7 @@ const AddScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
-  const [lessonComponentKey, setLessonComponentKey] = useState(0); 
+  const [lessonComponentKey, setLessonComponentKey] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -84,41 +83,40 @@ const AddScreen = () => {
   if (hasGalleryPermissions === false) {
     alert("Erişim Yok");
   }
-
   const handleAddPress = async () => {
-    if (!selectedLesson  ) {
-      Alert.alert(
-        "Eksik Bilgi",
-        "Lütfen Ders Seçiniz ",
-        [{ text: "Tamam" }]
-      );
+    if (!selectedLesson) {
+      Alert.alert("Eksik Bilgi", "Lütfen Ders Seçiniz ", [{ text: "Tamam" }]);
+      return;
+    } else if (!selectedTopic) {
+      Alert.alert("Eksik Bilgi", "Lütfen Konu Seçiniz ", [{ text: "Tamam" }]);
+      return;
+    } else if (!text) {
+      Alert.alert("Eksik Bilgi", "Lütfen Soru Metnini Giriniz ", [
+        { text: "Tamam" },
+      ]);
       return;
     }
-    else if (!selectedTopic  ) {
-      Alert.alert(
-        "Eksik Bilgi",
-        "Lütfen Konu Seçiniz ",
-        [{ text: "Tamam" }]
-      );
-      return;
-    } 
-    else if (!text  ) {
-      Alert.alert(
-        "Eksik Bilgi",
-        "Lütfen Soru Metnini Giriniz ",
-        [{ text: "Tamam" }]
-      );
-      return;
-    }
-    setIsLoading(true);
-    await question();
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    setLessonComponentKey(prevKey => prevKey + 1);
-  };
   
-
+    Alert.alert(
+      "Soru Paylaş",
+      "Soruyu paylaşmak istediğinize emin misiniz?",
+      [
+        {
+          text: "İptal",
+          style: "cancel",
+        },
+        {
+          text: "Evet",
+          onPress: async () => {
+            setIsLoading(true);
+            await question();
+            setIsLoading(false);
+            setLessonComponentKey((prevKey) => prevKey + 1);
+          },
+        },
+      ]
+    );
+  };
   
   const question = async () => {
     await uploadImageAndCreateQuestion(
@@ -147,22 +145,22 @@ const AddScreen = () => {
           onChangeText={(text) => setText(text)}
           value={text}
           placeholder="Sorunuzu giriniz"
-          placeholderTextColor="gray"
+          placeholderTextColor={Colors.placeholderText}
         />
       </View>
 
       <View style={styles.lessonComponentContainer}>
-  <LessonComponent 
-    onSelectLessonAndTopic={handleLessonAndTopicSelect}  
-    key={lessonComponentKey}
-  />
-</View>
+        <LessonComponent
+          onSelectLessonAndTopic={handleLessonAndTopicSelect}
+          key={lessonComponentKey}
+        />
+      </View>
 
       <TouchableOpacity
         style={[styles.button, { marginBottom: 20 }]}
         onPress={() => setModalVisible(true)}
       >
-        <Image source={galleryIcon} style={styles.icon} />
+        <Ionicons name="camera" size={24} color="#fff" />
         <Text style={styles.buttonText}>Görsel Seç</Text>
       </TouchableOpacity>
 
@@ -175,9 +173,11 @@ const AddScreen = () => {
         </View>
       )}
 
-      <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-        <Text style={styles.buttonText}>Soruyu Paylaş</Text>
-      </TouchableOpacity>
+      <View style={styles.addButtonContainer}>
+        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+          <Text style={styles.buttonTextAdd}>Soruyu Paylaş</Text>
+        </TouchableOpacity>
+      </View>
 
       <Modal
         animationType="slide"
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#fff",
     color: Colors.textColor,
-    fontWeight:"bold",
+    fontWeight: "bold",
     width: "98%",
   },
   buttonContainer: {
@@ -256,21 +256,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 15,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "black",
-    backgroundColor : Colors.buttonColor,
+    backgroundColor: Colors.mainColor,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   buttonText: {
     fontSize: 16,
-    color: "black",
+    color: Colors.buttonText,
     marginLeft: 10,
   },
+  icon: {
+    width: 24,
+    height: 24,
+    tintColor: Colors.buttonText,
+  },
+
   optionButton: {
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    paddingVertical :8
+    paddingVertical: 8,
   },
   optionText: {
     fontSize: 16,
@@ -283,14 +296,16 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 15,
-    padding: 10,
-    fontSize: 16,
-    minHeight: 250,
+    borderColor: Colors.inputBorder,
+    borderRadius: 20,
+    padding: 15,
+    fontSize: 14,
+    minHeight: 200,
     textAlign: "left",
     textAlignVertical: "top",
+    overflow: "scroll",
   },
+
   imageContainer: {
     alignItems: "center",
     position: "relative",
@@ -308,9 +323,11 @@ const styles = StyleSheet.create({
     right: 5,
   },
   deleteIcon: {
-    width: 20,
-    height: 20,
+    width: 24,
+    height: 24,
+    tintColor: Colors.deleteIcon,
   },
+
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -330,11 +347,48 @@ const styles = StyleSheet.create({
   lessonComponentContainer: {
     width: "100%",
     paddingHorizontal: 20,
-    paddingVertical: 10,
     backgroundColor: Colors.lessonComponentBackground,
-    borderRadius: 10,
+    borderRadius: 10
   },
-  
+
+  addButtonContainer: {
+    position: "absolute",
+    bottom: 80,
+    right: 30,
+  },
+  addButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 40,
+    backgroundColor: Colors.mainColor,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+  },
+  buttonTextAdd: {
+    fontSize: 12,
+    color: Colors.buttonText,
+  },
+  galleryButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    backgroundColor: Colors.galleryButtonBackground,
+  },
+  galleryButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: Colors.galleryButtonText,
+  },
 });
 
 export default AddScreen;

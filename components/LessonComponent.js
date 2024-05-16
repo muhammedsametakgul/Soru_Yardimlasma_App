@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,7 @@ import {
 } from "react-native";
 import { Colors } from "../utils/Colors";
 
-const LessonComponent = ({
-  onSelectLessonAndTopic,
-}) => {
+const LessonComponent = ({ onSelectLessonAndTopic }) => {
   const [selectedLesson, setSelectedLesson] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [isLessonModalVisible, setIsLessonModalVisible] = useState(false);
@@ -28,8 +26,6 @@ const LessonComponent = ({
     Türkçe: ["Ünlü Düşmesi", "Anlatım Bozuklukları", "Paragraf"],
     Tarih: ["Osmanlı Kuruluş", "Osmanlı Yükseliş", "Osmanlı Çöküş"],
   };
-
- 
 
   const handleLessonPress = () => {
     setIsLessonModalVisible(true);
@@ -54,94 +50,121 @@ const LessonComponent = ({
   };
 
   return (
-        <View style={styles.container}>
-          <View style={styles.listBox}>
-            <TouchableOpacity style={styles.button} onPress={handleLessonPress}>
-              <Text style={styles.buttonText}>
-                Ders : {selectedLesson || "Ders Seçiniz"}
-              </Text>
-            </TouchableOpacity>
-      
-            <TouchableOpacity style={styles.button} onPress={handleTopicPress}>
-              <Text style={styles.buttonText}>
-                Konu : {selectedTopic || "Konu Seçiniz"}
-              </Text>
-            </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.listBox}>
+        <TouchableOpacity style={styles.button} onPress={handleLessonPress}>
+          <Text style={styles.buttonText}>
+            Ders: {selectedLesson || "Ders Seçiniz"}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={handleTopicPress}>
+          <Text style={styles.buttonText}>
+            Konu: {selectedTopic || "Konu Seçiniz"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal
+        visible={isLessonModalVisible}
+        onRequestClose={() => setIsLessonModalVisible(false)}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={lessons}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => handleLessonSelect(item.name)}
+                >
+                  <Text style={styles.modalItemText}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
           </View>
-      
-          <Modal
-            visible={isLessonModalVisible}
-            onRequestClose={() => setIsLessonModalVisible(false)}
-          >
-            <View style={styles.modalContainer}>
-              <FlatList
-                data={lessons}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleLessonSelect(item.name)}>
-                    <Text style={styles.modalItem}>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item.id.toString()}
-              />
-            </View>
-          </Modal>
-      
-          <Modal
-            visible={isTopicModalVisible}
-            onRequestClose={() => setIsTopicModalVisible(false)}
-          >
-            <View style={styles.modalContainer}>
-              <FlatList
-                data={topics[selectedLesson]}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleTopicSelect(item)}>
-                    <Text style={styles.modalItem}>{item}</Text>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item) => item}
-              />
-            </View>
-          </Modal>
         </View>
-      );
+      </Modal>
+
+      <Modal
+        visible={isTopicModalVisible}
+        onRequestClose={() => setIsTopicModalVisible(false)}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={topics[selectedLesson]}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => handleTopicSelect(item)}
+                >
+                  <Text style={styles.modalItemText}>{item}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item}
+            />
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 5,
+    padding: 20,
   },
   button: {
     marginBottom: 10,
     backgroundColor: Colors.listBoxColor,
-    padding: 8,
-    borderRadius: 5,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    elevation: 3,
+    width: 300,
+    height: 40,
+    textAlign: "left",
   },
   buttonText: {
     color: "#fff",
     fontSize: 14,
     fontWeight: "bold",
+    textAlign: "left",
   },
-  modalContainer: {
+  modalOverlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop:40,
-    backgroundColor: Colors.modalBackgroungColor,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContainer: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    maxHeight: "80%",
+    elevation: 5,
   },
   modalItem: {
-    padding: 10,
-    fontSize: 18,
+    padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    width: "100%",
+    borderBottomColor: "#eee",
+  },
+  modalItemText: {
+    fontSize: 18,
     textAlign: "center",
+    color: Colors.textColor,
+    textAlign: "left",
   },
   listBox: {
-    backgroundColor: Colors.modalBackgroungColor,
     borderRadius: 10,
-    marginBottom: 20,
   },
-  
 });
 
 export default LessonComponent;
