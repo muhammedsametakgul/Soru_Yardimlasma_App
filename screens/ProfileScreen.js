@@ -109,13 +109,6 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoContainer}>
-        <Avatar.Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-          }}
-          size={100}
-          style={styles.avatar}
-        />
         <View style={styles.userInfoText}>
           <Title style={styles.title}>{username}</Title>
           <Caption style={styles.caption}>{email}</Caption>
@@ -127,7 +120,6 @@ const ProfileScreen = () => {
           <Icon name="pencil" color="#000" size={18} />
         </TouchableOpacity>
       </View>
-
       <View style={styles.menuWrapper}>
         <TouchableRipple onPress={() => navigateToMyQuestions()}>
           <View style={styles.menuItem}>
@@ -220,7 +212,6 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
     backgroundColor: "#ffffff",
   },
   userInfoContainer: {
@@ -228,6 +219,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingBottom: 10,
+    paddingTop:10,
     borderBottomWidth: 1,
     borderColor: "#e0e0e0",
     backgroundColor: Colors.mainColor
@@ -257,7 +249,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   menuWrapper: {
-    marginTop: 20,
+    paddingVertical: 10,
   },
   menuItem: {
     flexDirection: "row",
@@ -265,9 +257,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderBottomWidth: 1,
     borderColor: "#e0e0e0",
+    backgroundColor: "#f5f5f5", 
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    marginVertical: 5,
   },
   menuItemText: {
-    color: "#777777",
+    color: "#000",
     marginLeft: 20,
     fontWeight: "600",
     fontSize: 16,

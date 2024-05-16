@@ -16,14 +16,6 @@ import ProfileBox from "../components/ProfileBox";
 import { readQuestions } from "../service/readQuestions";
 import { filterQuestion } from "../service/filterQuestion";
 import { Colors } from "../utils/Colors";
-
-const motivationQuotes = [
-  "Hedeflerinize bir adım daha...",
-  "Her gün küçük bir ilerleme, büyük bir başarıya yol açar.",
-  "Başarı için en önemli adım, cesaretli bir adım atmaktır.",
-  "Hayallerinizi kovalayın, başarıya doğru adım adım ilerleyin.",
-  "Bugün için en iyisini yapın, yarın için en iyisini bekleyin.",
-];
 const lessons = [
   { id: 1, name: "Matematik" },
   { id: 2, name: "Türkçe" },
@@ -48,7 +40,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     fetchData();
-    setRandomMotivation();
   }, []);
 
   const fetchData = async () => {
@@ -69,10 +60,6 @@ const HomeScreen = () => {
     fetchData();
   };
 
-  const setRandomMotivation = () => {
-    const randomIndex = Math.floor(Math.random() * motivationQuotes.length);
-    setMotivationText(motivationQuotes[randomIndex]);
-  };
 
   const onSelectLessonAndTopic = (lesson, topic) => {
     setSelectedLessonModal(lesson);
@@ -125,13 +112,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      <View style={styles.header}>
-        <Image
-          source={require("../assets/images/YKSLogoV2.png")}
-          style={styles.logo}
-        />
-        <Text style={styles.headerText}>{motivationText}</Text>
-      </View>
+      
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
@@ -248,23 +229,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop: 50,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    marginBottom: 20,
-  },
-  headerText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 10,
-    flex: 1,
+    marginTop: 10,
   },
   logo: {
     width: 50,
@@ -272,7 +237,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   contentContainer: {
-    paddingBottom: 100,
+    paddingBottom: 40,
   },
   profileWrapper: {
     alignItems: "center",
