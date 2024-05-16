@@ -7,7 +7,6 @@ import {
   Modal,
   TextInput,
   Text,
-  Button,
   Alert,
   Share,
 } from "react-native";
@@ -45,9 +44,9 @@ const ProfileScreen = () => {
     navigation.navigate("MyQuestions");
   };
 
-  const navigateToChangePassword = () =>{
+  const navigateToChangePassword = () => {
     navigation.navigate("ChangePassword");
-  }
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -109,7 +108,7 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoContainer}>
-        <View style={styles.userInfoText}>
+           <View style={styles.userInfoText}>
           <Title style={styles.title}>{username}</Title>
           <Caption style={styles.caption}>{email}</Caption>
         </View>
@@ -121,9 +120,9 @@ const ProfileScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => navigateToMyQuestions()}>
+        <TouchableRipple onPress={navigateToMyQuestions}>
           <View style={styles.menuItem}>
-            <Icon name="bookmark" color="#FF6347" size={25} />
+            <Icon name="bookmark-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Sorduğum Sorular</Text>
           </View>
         </TouchableRipple>
@@ -144,14 +143,14 @@ const ProfileScreen = () => {
 
         <TouchableRipple onPress={navigateToChangePassword}>
           <View style={styles.menuItem}>
-            <Icon name="account-details" color="#FF6347" size={25} />
+            <Icon name="lock-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Şifre Değiştir</Text>
           </View>
         </TouchableRipple>
 
         <TouchableRipple onPress={handleSendVerificationEmail}>
           <View style={styles.menuItem}>
-            <Icon name="email" color="#FF6347" size={25} />
+            <Icon name="email-outline" color="#FF6347" size={25} />
             <Text style={styles.menuItemText}>Doğrulama E-postası Gönder</Text>
           </View>
         </TouchableRipple>
@@ -212,59 +211,59 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f0f2f5",
   },
+ 
   userInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingBottom: 10,
-    paddingTop:10,
-    borderBottomWidth: 1,
-    borderColor: "#e0e0e0",
-    backgroundColor: Colors.mainColor
+    paddingVertical: 15,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginTop: -40,
+    elevation: 5,
+    marginTop:10
   },
   userInfoText: {
     marginLeft: 15,
+    flex: 1,
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#333",
   },
   caption: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "500",
-    color: "#ffffff",
+    color: "#777",
   },
   avatar: {
-    backgroundColor: "#ffffff",
-    marginTop: 5,
+    backgroundColor: "#eee",
   },
   editButton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#eee",
     borderRadius: 20,
     padding: 5,
-    marginLeft: 15,
   },
   menuWrapper: {
-    paddingVertical: 10,
+    marginTop: 20,
   },
   menuItem: {
     flexDirection: "row",
     paddingVertical: 15,
     paddingHorizontal: 30,
-    borderBottomWidth: 1,
-    borderColor: "#e0e0e0",
-    backgroundColor: "#f5f5f5", 
+    marginHorizontal: 15,
     borderRadius: 10,
-    marginLeft: 15,
-    marginRight: 15,
-    marginVertical: 5,
+    backgroundColor: "#fff",
+    marginBottom: 10,
+    elevation: 2,
   },
   menuItemText: {
-    color: "#000",
+    color: "#333",
     marginLeft: 20,
     fontWeight: "600",
     fontSize: 16,
@@ -277,16 +276,16 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    elevation: 5,
-    width:300
+    width: 300,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    textAlign: "center",
   },
   input: {
     borderWidth: 1,
@@ -296,20 +295,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   saveButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: Colors.mainColor,
     borderRadius: 20,
     paddingVertical: 12,
     alignItems: "center",
     marginBottom: 10,
   },
   cancelButton: {
-    backgroundColor: "#777777",
+    backgroundColor: "#777",
     borderRadius: 20,
     paddingVertical: 12,
     alignItems: "center",
   },
   buttonText: {
-    color: "#ffffff",
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
   },
