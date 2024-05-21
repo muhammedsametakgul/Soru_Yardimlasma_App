@@ -19,7 +19,8 @@ export const Colors = {
   buttonLogin: "#F59D00",
 
   //Lesson Component
-  listBoxColor: "#FF6347",
+  listBoxColor: "#fff",
+  listBoxTextColor :"#000",
   modalBackgroungColor: "#ffffff",
 
   buttonDefault: "#000",

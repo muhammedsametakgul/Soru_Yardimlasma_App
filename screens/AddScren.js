@@ -237,11 +237,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#f0f2f5",
   },
   inputContainer: {
     padding: 10,
-    backgroundColor: "#fff",
+    backgroundColor: "#f0f2f5",
     color: Colors.textColor,
     fontWeight: "bold",
     width: "98%",
@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     textAlignVertical: "top",
     overflow: "scroll",
+    backgroundColor:"#fff"
   },
 
   imageContainer: {

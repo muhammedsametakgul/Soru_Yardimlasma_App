@@ -129,10 +129,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     width: 300,
     height: 40,
+    borderRadius: 10,
     textAlign: "left",
   },
   buttonText: {
-    color: "#fff",
+    color:Colors.listBoxTextColor,
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "left",
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   modalItemText: {
     fontSize: 18,
     textAlign: "center",
-    color: Colors.textColor,
+    color: Colors.listBoxTextColor,
     textAlign: "left",
   },
   listBox: {
