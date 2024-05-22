@@ -18,38 +18,46 @@ const MyQuestionsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
-  const navigation = useNavigation(); // Navigation hook'unu kullan
+  const navigation = useNavigation();
 
   useEffect(() => {
-    fetchData();
+    const fetchUserId = () => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        setUserId(currentUser.uid);
+      }
+    };
+
     fetchUserId();
   }, []);
 
-  const fetchUserId = () => {
-    const currentUser = auth.currentUser;
-    if (currentUser) {
-      setUserId(currentUser.uid);
-    }
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!userId) return;
+        
+        setLoading(true);
+        const fetchedQuestions = await getQuestionsByUserId(userId);
+        setQuestions(fetchedQuestions);
+        console.log("Fetched Questions : " + fetchedQuestions);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    };
 
-  const fetchData = async () => {
-    try {
-      if (!userId) return;
-
-      const fetchedQuestions = await getQuestionsByUserId(userId);
-      console.log("Fetched Questions : " + fetchedQuestions);
-      setQuestions(fetchedQuestions);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
+    if (userId) {
+      fetchData();
     }
-  };
+  }, [userId]);
 
   const onRefresh = () => {
     setRefreshing(true);
-    fetchData();
+    if (userId) {
+      fetchData();
+    }
   };
 
   return (
