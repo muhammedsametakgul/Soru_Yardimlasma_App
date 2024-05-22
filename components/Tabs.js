@@ -3,10 +3,9 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import React from "react";
-import AddScreen from "../screens/AddScren";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { Colors } from "../utils/Colors";
-
+import AddScreen from "../screens/AddScren";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,11 +22,11 @@ const Tabs = () => {
         initialRouteName="Home"
         screenOptions={{
           tabBarStyle: styles.tabBar,
-          tabBarActiveTintColor: "#000",
-          tabBarInactiveTintColor: "#ccc",
+          tabBarActiveTintColor: Colors.mainColor,
+          tabBarInactiveTintColor: "#8e8e93",
           tabBarLabelStyle: {
             fontSize: 12,
-            fontWeight: "500",
+            fontWeight: "600",
           },
         }}
       >
@@ -36,7 +35,7 @@ const Tabs = () => {
           component={HomeScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="home" size={24} color={color} />
+              <MaterialCommunityIcons name="home-outline" size={28} color={color} />
             ),
             tabBarLabel: "Anasayfa",
             header: () => <CustomHeader title="YKS Dostum" />
@@ -47,7 +46,7 @@ const Tabs = () => {
           component={AddScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="plus" size={24} color={color} />
+              <MaterialCommunityIcons name="plus-circle-outline" size={28} color={color} />
             ),
             tabBarLabel: "Ekle",
             header: () => <CustomHeader title="YKS Dostum" />
@@ -58,7 +57,7 @@ const Tabs = () => {
           component={ProfileScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name="account" size={24} color={color} />
+              <MaterialCommunityIcons name="account-circle-outline" size={28} color={color} />
             ),
             tabBarLabel: "Ayarlar",
             header: () => <CustomHeader title="YKS Dostum" />
@@ -72,20 +71,21 @@ const Tabs = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0"
+    backgroundColor: "#ffffff"
   },
   header: {
     height: 80,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop:20,
+    paddingTop: 20,
     backgroundColor: Colors.mainColor,
     borderBottomWidth: 1,
-    borderBottomColor: 'black'
+    borderBottomColor: '#dddddd'
   },
   headerText: {
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#ffffff'
   },
   tabBar: {
     position: "absolute",
@@ -94,9 +94,16 @@ const styles = StyleSheet.create({
     right: 16,
     borderRadius: 16,
     elevation: 8,
-    backgroundColor: "#f0f0f0",
-    borderWidth: 1,
-    borderColor: "black",
+    backgroundColor: "#ffffff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 6.00,
+    borderTopWidth: 0,
+    height: 50,
   },
 });
 
