@@ -8,6 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { Colors } from "../utils/Colors";
+import { lessons } from "../utils/lessons";
+import { topics } from "../utils/topics";
+
+
 
 const LessonComponent = ({ onSelectLessonAndTopic }) => {
   const [selectedLesson, setSelectedLesson] = useState("");
@@ -15,18 +19,7 @@ const LessonComponent = ({ onSelectLessonAndTopic }) => {
   const [isLessonModalVisible, setIsLessonModalVisible] = useState(false);
   const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
 
-  const lessons = [
-    { id: 1, name: "Matematik" },
-    { id: 2, name: "Türkçe" },
-    { id: 3, name: "Tarih" },
-  ];
-
-  const topics = {
-    Matematik: ["Lineer cebir", "Geometri", "Birinci Dereceden Denklemler"],
-    Türkçe: ["Ünlü Düşmesi", "Anlatım Bozuklukları", "Paragraf"],
-    Tarih: ["Osmanlı Kuruluş", "Osmanlı Yükseliş", "Osmanlı Çöküş"],
-  };
-
+ 
   const handleLessonPress = () => {
     setIsLessonModalVisible(true);
   };

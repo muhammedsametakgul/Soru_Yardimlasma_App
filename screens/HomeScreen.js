@@ -16,16 +16,12 @@ import ProfileBox from "../components/ProfileBox";
 import { readQuestions } from "../service/readQuestions";
 import { filterQuestion } from "../service/filterQuestion";
 import { Colors } from "../utils/Colors";
-const lessons = [
-  { id: 1, name: "Matematik" },
-  { id: 2, name: "Türkçe" },
-  { id: 3, name: "Tarih" },
-];
-const topics = {
-  Matematik: ["Lineer cebir", "Geometri", "Birinci Dereceden Denklemler"],
-  Türkçe: ["Ünlü Düşmesi", "Anlatım Bozuklukları", "Paragraf"],
-  Tarih: ["Osmanlı Kuruluş", "Osmanlı Yükseliş", "Osmanlı Çöküş"],
-};
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { lessons } from "../utils/lessons";
+import { topics } from "../utils/topics";
+
+
+
 const HomeScreen = () => {
   const [questions, setQuestions] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -143,7 +139,7 @@ const HomeScreen = () => {
         style={styles.floatingButton}
         onPress={() => setIsFilterModalVisible(true)}
       >
-        <Text style={styles.floatingButtonText}>+</Text>
+        <MaterialCommunityIcons name="filter" size={28} color="#fff" />
       </TouchableOpacity>
       <Modal
         visible={isFilterModalVisible}
@@ -227,7 +223,6 @@ const HomeScreen = () => {
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -272,13 +267,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: 300,
-    height: 300,
     backgroundColor: "#fff",
-    borderRadius: 10,
     padding: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 10,
+    width: "80%",
+    maxHeight: "80%",
+    elevation: 5,
   },
   modalButtons: {
     flexDirection: "row",
@@ -303,9 +297,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.listBoxColor,
     padding: 8,
     borderRadius: 5,
+    borderColor: "#000",
+    borderWidth: 1,
   },
+  
   buttonText: {
-    color: "#fff",
+    color: "#000",
     fontSize: 14,
     fontWeight: "bold",
   },
