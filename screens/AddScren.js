@@ -20,7 +20,7 @@ import { Colors } from "../utils/Colors";
 
 const galleryIcon = require("../assets/images/galleryicon.jpg");
 const deleteIcon = require("../assets/images/delete.png");
-const loadingAnimation = require("../assets/animations/loading.json");
+const loadingAnimation = require("../assets/animations/animation.json");
 import { Ionicons } from "@expo/vector-icons";
 
 const AddScreen = () => {

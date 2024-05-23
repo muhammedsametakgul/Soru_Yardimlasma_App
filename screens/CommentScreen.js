@@ -20,7 +20,7 @@ import { useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import LottieView from "lottie-react-native";
 import { Colors } from "../utils/Colors";
-const loadingAnimation = require("../assets/animations/loading.json");
+const loadingAnimation = require("../assets/animations/animation.json");
 const nocomments = require("../assets/images/nocomments.png");
 
 const CommentScreen = () => {
