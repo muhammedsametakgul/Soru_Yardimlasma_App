@@ -158,10 +158,9 @@ const AddScreen = () => {
 
       <TouchableOpacity
         style={[styles.button, { marginBottom: 20 }]}
-        onPress={() => setModalVisible(true)}
+        onPress={handleAddPress}
       >
-        <Ionicons name="camera" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Görsel Seç</Text>
+        <Text style={styles.buttonText}>Soru Ekle</Text>
       </TouchableOpacity>
 
       {image && (
@@ -174,8 +173,8 @@ const AddScreen = () => {
       )}
 
       <View style={styles.addButtonContainer}>
-        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <Text style={styles.buttonTextAdd}>Soruyu Paylaş</Text>
+        <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+        <Ionicons name="camera" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
 

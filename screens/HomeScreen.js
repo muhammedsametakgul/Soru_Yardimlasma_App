@@ -7,10 +7,9 @@ import {
   SafeAreaView,
   RefreshControl,
   ActivityIndicator,
-  Image,
-  Modal,
   TouchableOpacity,
   FlatList,
+  Modal,
 } from "react-native";
 import ProfileBox from "../components/ProfileBox";
 import { readQuestions } from "../service/readQuestions";
@@ -19,8 +18,6 @@ import { Colors } from "../utils/Colors";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { lessons } from "../utils/lessons";
 import { topics } from "../utils/topics";
-
-
 
 const HomeScreen = () => {
   const [questions, setQuestions] = useState([]);
@@ -55,7 +52,6 @@ const HomeScreen = () => {
     setRefreshing(true);
     fetchData();
   };
-
 
   const onSelectLessonAndTopic = (lesson, topic) => {
     setSelectedLessonModal(lesson);
@@ -108,7 +104,6 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
@@ -168,42 +163,6 @@ const HomeScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <Modal
-              visible={isLessonModalVisible}
-              onRequestClose={() => setIsLessonModalVisible(false)}
-            >
-              <View style={styles.modalContainer}>
-                <FlatList
-                  data={lessons}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      onPress={() => handleLessonSelect(item.name)}
-                    >
-                      <Text style={styles.modalItem}>{item.name}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item.id.toString()}
-                />
-              </View>
-            </Modal>
-
-            <Modal
-              visible={isTopicModalVisible}
-              onRequestClose={() => setIsTopicModalVisible(false)}
-            >
-              <View style={styles.modalContainer}>
-                <FlatList
-                  data={topics[selectedLessonModal]}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handleTopicSelect(item)}>
-                      <Text style={styles.modalItem}>{item}</Text>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={(item) => item}
-                />
-              </View>
-            </Modal>
-
             <TouchableOpacity
               style={styles.clearButton}
               onPress={handleClearFilters}
@@ -220,18 +179,56 @@ const HomeScreen = () => {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        visible={isLessonModalVisible}
+        onRequestClose={() => setIsLessonModalVisible(false)}
+        transparent={true}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={lessons}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => handleLessonSelect(item.name)}
+                >
+                  <Text style={styles.modalItem}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isTopicModalVisible}
+        onRequestClose={() => setIsTopicModalVisible(false)}
+        transparent={true}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <FlatList
+              data={topics[selectedLessonModal]}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleTopicSelect(item)}>
+                  <Text style={styles.modalItem}>{item}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item) => item}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     marginTop: 10,
-  },
-  logo: {
-    width: 50,
-    height: 50,
-    resizeMode: "contain",
   },
   contentContainer: {
     paddingBottom: 40,
@@ -256,10 +253,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  floatingButtonText: {
-    color: "#fff",
-    fontSize: 24,
-  },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",
@@ -272,25 +265,26 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
     maxHeight: "80%",
-    elevation: 5,
   },
-  modalButtons: {
-    flexDirection: "row",
-    marginTop: 20,
+  modalContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    width: "80%",
+    maxHeight: "80%",
+    padding: 20,
+    justifyContent: "center",
   },
-  modalButton: {
-    backgroundColor: Colors.buttonLogin,
+  modalItem: {
     padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 10,
+    fontSize: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    textAlign: "center",
   },
-  modalButtonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  container: {
-    padding: 5,
+  listBox: {
+    backgroundColor: Colors.modalBackgroungColor,
+    borderRadius: 10,
+    marginBottom: 20,
   },
   button: {
     marginBottom: 10,
@@ -300,31 +294,10 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     borderWidth: 1,
   },
-  
   buttonText: {
     color: "#000",
     fontSize: 14,
     fontWeight: "bold",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-    backgroundColor: Colors.modalBackgroungColor,
-  },
-  modalItem: {
-    padding: 10,
-    fontSize: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    width: "100%",
-    textAlign: "center",
-  },
-  listBox: {
-    backgroundColor: Colors.modalBackgroungColor,
-    borderRadius: 10,
-    marginBottom: 20,
   },
   clearButton: {
     backgroundColor: Colors.buttonDefault,
@@ -346,11 +319,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   filterButtonText: {
-    color: "#FFFFFF",
+    color: "#fff",
     fontSize: 14,
     fontWeight: "bold",
   },
-  
 });
 
 export default HomeScreen;
