@@ -11,15 +11,12 @@ import { Colors } from "../utils/Colors";
 import { lessons } from "../utils/lessons";
 import { topics } from "../utils/topics";
 
-
-
 const LessonComponent = ({ onSelectLessonAndTopic }) => {
   const [selectedLesson, setSelectedLesson] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [isLessonModalVisible, setIsLessonModalVisible] = useState(false);
   const [isTopicModalVisible, setIsTopicModalVisible] = useState(false);
 
- 
   const handleLessonPress = () => {
     setIsLessonModalVisible(true);
   };
@@ -42,6 +39,11 @@ const LessonComponent = ({ onSelectLessonAndTopic }) => {
     onSelectLessonAndTopic(selectedLesson, topic);
   };
 
+  const handleClearSelection = () => {
+    setSelectedLesson("");
+    setSelectedTopic("");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.listBox}>
@@ -55,6 +57,10 @@ const LessonComponent = ({ onSelectLessonAndTopic }) => {
           <Text style={styles.buttonText}>
             Konu: {selectedTopic || "Konu Seçiniz"}
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.clearButton} onPress={handleClearSelection}>
+          <Text style={styles.clearButtonText}>Temizle</Text>
         </TouchableOpacity>
       </View>
 
@@ -125,11 +131,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     textAlign: "left",
   },
+  clearButton: {
+    marginBottom: 10,
+    backgroundColor: Colors.listBoxColor,
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    elevation: 3,
+    width: 100,
+    height: 40,
+    borderRadius: 10,
+    textAlign: "center",
+    fontStyle: "italic",
+    color: Colors.textColor,
+  },
   buttonText: {
     color:Colors.listBoxTextColor,
     fontSize: 14,
     fontWeight: "bold",
     textAlign: "left",
+  },
+  clearButtonText: {
+    color: Colors.clearButtonTextColor,
+    fontSize: 14,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalOverlay: {
     flex: 1,
@@ -158,7 +184,8 @@ const styles = StyleSheet.create({
   },
   listBox: {
     borderRadius: 10,
-  },
-});
-
-export default LessonComponent;
+    alignItems: "center",  },
+  });
+  
+  export default LessonComponent;
+  
