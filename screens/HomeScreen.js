@@ -71,6 +71,7 @@ const HomeScreen = () => {
       selectedTopicModal
     );
     setFilteredQuestions(filtered);
+    setIsFilterModalVisible(false);
   };
 
   const handleLessonPress = () => {
@@ -143,6 +144,12 @@ const HomeScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsFilterModalVisible(false)}
+            >
+              <MaterialCommunityIcons name="close" size={24} color="#000" />
+            </TouchableOpacity>
             <View style={styles.listBox}>
               <TouchableOpacity
                 style={styles.button}
@@ -187,6 +194,12 @@ const HomeScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsLessonModalVisible(false)}
+            >
+              <MaterialCommunityIcons name="close" size={24} color="#000" />
+            </TouchableOpacity>
             <FlatList
               data={lessons}
               renderItem={({ item }) => (
@@ -209,6 +222,12 @@ const HomeScreen = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setIsTopicModalVisible(false)}
+            >
+              <MaterialCommunityIcons name="close" size={24} color="#000" />
+            </TouchableOpacity>
             <FlatList
               data={topics[selectedLessonModal]}
               renderItem={({ item }) => (
@@ -265,6 +284,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
     maxHeight: "80%",
+    paddingTop: 40,
   },
   modalContainer: {
     backgroundColor: "#fff",
@@ -272,9 +292,9 @@ const styles = StyleSheet.create({
     width: "80%",
     maxHeight: "80%",
     padding: 20,
+    paddingTop: 40, 
     justifyContent: "center",
-  },
-  modalItem: {
+  },modalItem: {
     padding: 10,
     fontSize: 18,
     borderBottomWidth: 1,
@@ -322,6 +342,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     fontWeight: "bold",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
 });
 
