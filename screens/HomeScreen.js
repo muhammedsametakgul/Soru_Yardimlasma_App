@@ -248,6 +248,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     marginTop: 10,
+    marginBottom:80
+
   },
   contentContainer: {
     paddingBottom: 40,
@@ -264,7 +266,7 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: "absolute",
     right: 20,
-    bottom: "10%",
+    bottom: "0%",
     backgroundColor: Colors.buttonColor,
     width: 60,
     height: 60,
