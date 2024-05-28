@@ -6,14 +6,11 @@ import React from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { Colors } from "../utils/Colors";
 import AddScreen from "../screens/AddScren";
+import CustomHeader from "./CustomHeader";
 
 const Tab = createBottomTabNavigator();
 
-const CustomHeader = ({ title }) => (
-  <View style={styles.header}>
-    <Text style={styles.headerText}>{title}</Text>
-  </View>
-);
+
 
 const Tabs = () => {
   return (
