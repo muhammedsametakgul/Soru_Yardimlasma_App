@@ -23,21 +23,19 @@ const ProfileBox = ({ name, description, imageSource, questionId, date, lesson, 
         <Text style={styles.date}>{date}</Text> 
       </View>
       <View style={styles.bodyStyle}>
-      <Text style={styles.description}>{description}</Text>
-      {imageSource && imageSource.uri !== null ? (
-        <TouchableOpacity onPress={handleImagePress}>
-          <Image source={imageSource} style={styles.image} />
-        </TouchableOpacity>
-      ) : null}
+        <Text style={styles.description}>{description}</Text>
+        {imageSource && imageSource.uri !== null ? (
+          <TouchableOpacity onPress={handleImagePress}>
+            <Image source={imageSource} style={styles.image} />
+          </TouchableOpacity>
+        ) : null}
       </View>
       <View style={styles.lessonSubjectContainer}>
         <Text style={styles.lessonSubject}>{lesson}</Text>
         <Text style={styles.lessonSubject}>{subject}</Text>
-
       </View>
       <TouchableOpacity style={styles.commentsButton} onPress={handleCommentsPress}>
-        <Icon name="comment" size={20} color="#FFF" />
-        <Text style={styles.commentsButtonText}>Cevaplara Git</Text>
+        <Icon name="comment" size={20} color="#000" />
       </TouchableOpacity>
       <Modal
         visible={modalVisible}
@@ -115,13 +113,21 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     paddingVertical: 8, 
     paddingHorizontal: 12, 
-    backgroundColor: Colors.buttonColor,
+    backgroundColor: "#FFF",
     borderRadius: 16,
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   
   commentsButtonText: {
-    color: "#FFF",
+    color: "#333",
     fontWeight: "bold",
     marginLeft: 5, 
   },
@@ -133,8 +139,6 @@ const styles = StyleSheet.create({
     color: "#777",
     fontStyle: "italic",
   },
-  
-  
   modalContainer: {
     flex: 1,
     justifyContent: "center",
