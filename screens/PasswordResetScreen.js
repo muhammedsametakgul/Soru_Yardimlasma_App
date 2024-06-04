@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Button, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { auth } from "../config/firebaseConfig";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { Colors } from "../utils/Colors";
@@ -17,25 +17,32 @@ const PasswordResetScreen = ({ navigation }) => {
         );
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        Alert.alert(errorMessage);
+        if (error.code === 'auth/user-not-found') {
+          Alert.alert("Böyle bir kullanıcı bulunamadı.");
+        } else {
+          Alert.alert(error.message);
+        }
       });
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Şifremi Unuttum</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={(email) => setEmail(email)}
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-      <Pressable style={styles.button} onPress={handlePasswordReset}>
-        <Text style={styles.buttonText}>Şifre Sıfırlama Bağlantısı Gönder</Text>
-      </Pressable>
+      <View style={styles.innerContainer}>
+        <Text style={styles.title}>Şifremi Unuttum</Text>
+        <Text style={styles.subtitle}>Lütfen e-posta adresinizi girin, size bir şifre sıfırlama bağlantısı gönderelim.</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={(email) => setEmail(email)}
+          autoCorrect={false}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <Pressable style={styles.button} onPress={handlePasswordReset}>
+          <Text style={styles.buttonText}>Şifre Sıfırlama Bağlantısı Gönder</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };
@@ -45,30 +52,53 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+  },
+  innerContainer: {
+    width: "100%",
+    padding: 20,
     backgroundColor: "#fff",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
     marginBottom: 20,
+    textAlign: "center",
   },
   input: {
-    width: "80%",
-    height: 40,
+    width: "100%",
+    height: 50,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#ddd",
     borderRadius: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     marginBottom: 20,
+    backgroundColor: "#f9f9f9",
   },
   button: {
     backgroundColor: Colors.buttonColor,
-    padding: 10,
+    paddingVertical: 15,
     borderRadius: 5,
+    alignItems: "center",
   },
   buttonText: {
     color: "white",
     fontSize: 16,
+    fontWeight: "bold",
   },
 });
 
