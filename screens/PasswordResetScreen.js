@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: Colors.buttonColor,
     textAlign: "center",
   },
   subtitle: {

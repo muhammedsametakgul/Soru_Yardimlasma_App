@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import { auth } from "../config/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Colors } from "../utils/Colors";
-const google = require("../assets/images/google.png");
 
 const LoginScreen = () => {
   const [username, setUsername] = useState("");
@@ -34,7 +33,6 @@ const LoginScreen = () => {
         }
       });
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,35 +45,34 @@ const LoginScreen = () => {
           style={styles.input}
           placeholder="Email"
           value={username}
-          onChangeText={(username) => setUsername(username)}
+          onChangeText={setUsername}
           autoCorrect={false}
           autoCapitalize="none"
           keyboardType="email-address"
+          placeholderTextColor="#888"
         />
         <TextInput
           style={styles.input}
           placeholder="Şifre"
           secureTextEntry
           value={password}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={setPassword}
           autoCorrect={false}
           autoCapitalize="none"
+          placeholderTextColor="#888"
         />
         <Pressable onPress={() => navigation.navigate("Reset")}>
-          <Text style={[styles.forgetText, styles.marginBottom]}>Şifremi unuttum</Text>
+          <Text style={styles.forgetText}>Şifremi unuttum</Text>
         </Pressable>
       </View>
 
-      <View style={styles.buttonView}>
-        <Pressable style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Giriş Yap</Text>
-        </Pressable>
-      </View>
-
+      <Pressable style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Giriş Yap</Text>
+      </Pressable>
 
       <Pressable onPress={() => navigation.navigate("Signup")}>
         <Text style={styles.signupText}>
-          Hesabın yok mu? <Text style={styles.orangeBold}>Kaydol</Text>
+          Hesabın yok mu? <Text style={styles.boldRegister}>Kaydol</Text>
         </Text>
       </Pressable>
     </SafeAreaView>
@@ -84,82 +81,63 @@ const LoginScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    paddingTop: 70,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#fff",
+    paddingTop: 60,
+    backgroundColor: "#f0f4f8",
   },
-  orangeBold: {
+  boldRegister: {
     fontWeight: "bold",
-    color: "orange",
+    color: Colors.buttonColor,
   },
   image: {
-    height: 250,
-    width: 250,
-    marginBottom: "10%",
+    height: 150,
+    width: 150,
+    marginBottom: 40,
+    borderRadius: 75, 
   },
   inputView: {
-    gap: 15,
-    width: "100%",
-    paddingHorizontal: 40,
-    marginBottom: 20, 
+    width: "90%",
+    marginBottom: 20,
   },
   input: {
     height: 50,
     paddingHorizontal: 20,
-    borderColor: "black",
+    borderColor: "#ddd",
     borderWidth: 1,
-    borderRadius: 7,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#fff",
   },
   forgetText: {
-    fontSize: 11,
-    color: "orange",
-    marginTop: 10, 
-    marginLeft:210
-  },
-  marginBottom: {
-    marginBottom: 10, 
+    fontSize: 14,
+    color: Colors.buttonColor,
+    alignSelf: "flex-end",
+    marginBottom: 20,
   },
   button: {
     backgroundColor: Colors.buttonColor,
-    height: 45,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
+    height: 50,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
+    width: "90%",
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
   },
   buttonText: {
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
   },
-  buttonView: {
-    width: "100%",
-    paddingHorizontal: 50,
-  },
-  optionsText: {
-    textAlign: "center",
-    paddingVertical: 10,
-    color: "gray",
-    fontSize: 13,
-    marginBottom: 6,
-  },
-  mediaIcons: {
-    flexDirection: "row",
-    gap: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 23,
-  },
-  icons: {
-    width: 40,
-    height: 40,
-  },
   signupText: {
-    marginTop: 20,
-    
+    color: "gray",
+    fontSize: 16,
   },
 });
 

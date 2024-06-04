@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { Alert, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Colors } from '../utils/Colors';
 import { useNavigation } from "@react-navigation/native";
 import { signUpWithEmailAndPassword } from '../service/SignupUser';
@@ -11,19 +11,20 @@ const SignupScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigation = useNavigation();
 
-  const handleSignup = async() => {
+  const handleSignup = async () => {
     try {
       if (password !== confirmPassword) {
         throw new Error("Parolalar eşleşmiyor.");
       }
       signUpWithEmailAndPassword(email, password, username)
-    .then((user) => {
-      console.log("Kullanıcı başarıyla oluşturuldu:", user);
-    })
+        .then((user) => {
+          console.log("Kullanıcı başarıyla oluşturuldu:", user);
+        })
     } catch (error) {
       console.log(error);
+      Alert.alert(error.message);
     }
-  };    
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,25 +33,25 @@ const SignupScreen = () => {
         <TextInput
           style={styles.input}
           placeholder='Kullanıcı Adı'
-          value={(username) => setUsername(username)}
+          value={username}
           onChangeText={setUsername}
           autoCorrect={false}
           autoCapitalize='none'
-          keyboardType="email-address" 
         />
         <TextInput
           style={styles.input}
           placeholder='Email'
-          value={(email) => setEmail(email)}
+          value={email}
           onChangeText={setEmail}
           autoCorrect={false}
           autoCapitalize='none'
+          keyboardType="email-address"
         />
         <TextInput
           style={styles.input}
           placeholder='Şifre'
           secureTextEntry
-          value={(password) => setPassword(password)}
+          value={password}
           onChangeText={setPassword}
           autoCorrect={false}
           autoCapitalize='none'
@@ -59,7 +60,7 @@ const SignupScreen = () => {
           style={styles.input}
           placeholder='Şifreyi Onayla'
           secureTextEntry
-          value={(confirmPassword) => setConfirmPassword(confirmPassword)}
+          value={confirmPassword}
           onChangeText={setConfirmPassword}
           autoCorrect={false}
           autoCapitalize='none'
@@ -82,36 +83,37 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#f0f4f8',
+    padding: 20,
   },
   image: {
-    height: 250,
-    width: 250,
-    marginBottom: '10%',
+    height: 150,
+    width: 150,
+    marginBottom: 30,
+    borderRadius: 75,
   },
   inputView: {
     width: "100%",
-    paddingHorizontal: 40,
-    marginBottom: 20
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   input: {
     height: 50,
-    paddingHorizontal: 20,
-    borderColor: "black",
+    paddingHorizontal: 15,
+    borderColor: "#ccc",
     borderWidth: 1,
-    borderRadius: 7,
-    marginBottom: 15
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: "#fff",
   },
   button: {
     backgroundColor: Colors.buttonColor,
-    height: 45,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
+    height: 50,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 50,
-    marginBottom: 20
+    width: "80%",
+    marginBottom: 20,
   },
   buttonText: {
     color: "white",
@@ -123,8 +125,9 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   login: {
-    color: "orange",
-    fontSize: 13
+    color: Colors.buttonColor,
+    fontSize: 15,
+    fontWeight: "bold"
   }
 });
 
