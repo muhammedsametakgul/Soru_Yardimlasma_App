@@ -70,12 +70,8 @@ const LoginScreen = () => {
         <Pressable style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </Pressable>
-        <Text style={styles.optionsText}>veya</Text>
       </View>
 
-      <View style={styles.mediaIcons}>
-        <Image source={google} style={styles.icons} />
-      </View>
 
       <Pressable onPress={() => navigation.navigate("Signup")}>
         <Text style={styles.signupText}>
