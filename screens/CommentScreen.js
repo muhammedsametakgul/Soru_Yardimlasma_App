@@ -20,6 +20,7 @@ import { useRoute } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import LottieView from "lottie-react-native";
 import { Colors } from "../utils/Colors";
+
 const loadingAnimation = require("../assets/animations/animation.json");
 const nocomments = require("../assets/images/nocomments.png");
 
@@ -71,30 +72,25 @@ const CommentScreen = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
   };
+
   const handleAddImage = async () => {
     pickImage();
-    console.log("Selected Image URL:", result.assets[0].uri);
   };
 
   const handleCommentSubmit = async () => {
-    console.log("Submit Comment:", commentText);
     try {
       const questionId = route.params?.questionId;
       if (!questionId) {
         throw new Error("Question ID not found.");
       }
 
-      -setIsLoading(true);
+      setIsLoading(true);
 
-      const addedCommentRef = await createComment(
-        questionId,
-        commentText,
-        selectedImage
-      );
+      await createComment(questionId, commentText, selectedImage);
 
       setSelectedImage(null);
       setCommentText("");
@@ -103,7 +99,6 @@ const CommentScreen = () => {
       fetchData();
     } catch (error) {
       console.error("Error creating comment:", error);
-
       setIsLoading(false);
     }
   };
@@ -124,10 +119,9 @@ const CommentScreen = () => {
           >
             {comments.length === 0 ? (
               <View style={styles.noCommentsContainer}>
-  <Image source={nocomments} style={styles.noCommentsImage} />
-  <Text style={styles.noCommentsText}>Henüz cevap yok</Text>
-</View>
-
+                <Image source={nocomments} style={styles.noCommentsImage} />
+                <Text style={styles.noCommentsText}>Henüz cevap yok</Text>
+              </View>
             ) : (
               comments.map((comment, index) => (
                 <View key={index} style={styles.profileWrapper}>
@@ -145,10 +139,12 @@ const CommentScreen = () => {
               <TextInput
                 style={styles.commentInput}
                 placeholder="Yorumunuzu buraya yazın..."
-                onChangeText={(commentText) => setCommentText(commentText)}
+                onChangeText={(text) => setCommentText(text)}
+                value={commentText}
                 multiline={true}
                 numberOfLines={4}
                 textAlignVertical="top"
+                placeholderTextColor="#888"
               />
               <TouchableOpacity
                 style={styles.addImageButton}
@@ -199,10 +195,11 @@ const CommentScreen = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    marginTop: 50,
+    backgroundColor: "#f0f4f8",
   },
   contentContainer: {
     paddingBottom: 150,
+    marginTop:50
   },
   profileWrapper: {
     alignItems: "center",
@@ -218,33 +215,36 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    backgroundColor: "#FFFFFF",
+    borderTopWidth: 1,
+    borderTopColor: "#CCCCCC",
+    paddingVertical: 10,
   },
   commentContainer: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#CCCCCC",
-    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 10,
   },
   commentInput: {
     flex: 1,
     borderWidth: 1,
     borderColor: "#CCCCCC",
-    borderRadius: 5,
-    padding: 8,
-    marginRight: 10,
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: "#fff",
     maxHeight: 120,
   },
   addImageButton: {
     backgroundColor: Colors.buttonColor,
     borderRadius: 5,
     padding: 10,
+    marginLeft: 10,
   },
   submitButton: {
     backgroundColor: Colors.buttonColor,
     borderRadius: 5,
     padding: 10,
+    marginLeft: 10,
   },
   submitButtonText: {
     color: "#FFFFFF",
@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginLeft: 10,
+    borderRadius: 5,
   },
   modalContainer: {
     flex: 1,
@@ -276,20 +277,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: "70%"
+    marginVertical: 50,
   },
   noCommentsText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#666666",
-    textAlign: "center", 
+    textAlign: "center",
   },
-  
   noCommentsImage: {
-    width: 150, 
-    height: 150, 
+    width: 150,
+    height: 150,
+    marginBottom: 10,
   },
-  
 });
 
 export default CommentScreen;

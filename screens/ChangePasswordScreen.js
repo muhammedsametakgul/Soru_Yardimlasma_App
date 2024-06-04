@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet, Pressable, Text } from 'react-native';
 import { auth } from '../config/firebaseConfig';
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { Colors } from '../utils/Colors';
-
 
 const ChangePasswordScreen = () => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -47,7 +46,8 @@ const ChangePasswordScreen = () => {
         placeholder="Mevcut Şifre"
         autoCapitalize="none"
         value={currentPassword}
-        onChangeText={(currentPassword) => setCurrentPassword(currentPassword)}
+        onChangeText={setCurrentPassword}
+        placeholderTextColor="#888"
       />
       <TextInput
         style={styles.input}
@@ -55,7 +55,8 @@ const ChangePasswordScreen = () => {
         placeholder="Yeni Şifre"
         autoCapitalize="none"
         value={newPassword}
-        onChangeText={(newPassword) => setNewPassword(newPassword)}
+        onChangeText={setNewPassword}
+        placeholderTextColor="#888"
       />
       <TextInput
         style={styles.input}
@@ -63,9 +64,12 @@ const ChangePasswordScreen = () => {
         placeholder="Yeni Şifre Onayı"
         autoCapitalize="none"
         value={confirmNewPassword}
-        onChangeText={(confirmNewPassword) => setConfirmNewPassword(confirmNewPassword)}
+        onChangeText={setConfirmNewPassword}
+        placeholderTextColor="#888"
       />
-      <Button title="Şifreyi Değiştir" onPress={handleChangePassword} style={styles.buttonChangePassword} />
+      <Pressable style={styles.button} onPress={handleChangePassword}>
+        <Text style={styles.buttonText}>Şifreyi Değiştir</Text>
+      </Pressable>
     </View>
   );
 };
@@ -74,18 +78,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f0f4f8',
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    width: '100%',
+    paddingHorizontal: 15,
+    borderColor: '#ddd',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    color: '#000',
   },
-  buttonChangePassword:{
-    backgroundColor: Colors.buttonColor
-  }
+  button: {
+    backgroundColor: Colors.buttonColor,
+    height: 50,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 export default ChangePasswordScreen;

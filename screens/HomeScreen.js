@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   clearButton: {
-    backgroundColor: Colors.buttonDefault,
+    backgroundColor: Colors.buttonColor,
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   filterButton: {
-    backgroundColor: Colors.buttonDefault,
+    backgroundColor: Colors.buttonColor,
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
