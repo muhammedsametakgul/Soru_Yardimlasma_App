@@ -9,6 +9,7 @@ import {
   Text,
   Alert,
   Share,
+  ScrollView,
 } from "react-native";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -29,6 +30,7 @@ const ProfileScreen = () => {
   const [email, setEmail] = useState(auth.currentUser.email);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [usageModalVisible, setUsageModalVisible] = useState(false);
   const [newUsername, setNewUserName] = useState("");
   const [newEmail, setNewEmail] = useState("");
 
@@ -108,7 +110,7 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoContainer}>
-           <View style={styles.userInfoText}>
+        <View style={styles.userInfoText}>
           <Title style={styles.title}>{username}</Title>
           <Caption style={styles.caption}>{email}</Caption>
         </View>
@@ -134,10 +136,10 @@ const ProfileScreen = () => {
           </View>
         </TouchableRipple>
 
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={() => setUsageModalVisible(true)}>
           <View style={styles.menuItem}>
             <Icon name="account-check-outline" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Destek Ol</Text>
+            <Text style={styles.menuItemText}>Kullanım Kılavuzu</Text>
           </View>
         </TouchableRipple>
 
@@ -204,6 +206,44 @@ const ProfileScreen = () => {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={usageModalVisible}
+        onRequestClose={() => {
+          setUsageModalVisible(!usageModalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView>
+              <Text style={styles.modalTitle}>Kullanım Kılavuzu</Text>
+              <Text style={styles.titleModal}>Soru Eklemek</Text>
+              <Text style={styles.usageText}>1. Soru Eklemek için Alt kısımda bulunan bölümden EKLE butonuna tıklayın</Text>
+              <Text style={styles.usageText}>2. Soru Metni, Ders ve Konu zorunlu olmak kaydıyla görsel isteğe bağlı olacak şekilde sorunuzu sisteme yükleyin</Text>
+              <Text style={styles.usageText}>3. Ekle butonuna tıklayınız</Text>
+              <Text style={styles.usageText}> - - - - - - - - - - - - - - </Text>
+              <Text style={styles.titleModal}>Soru Cevaplamak</Text>
+              <Text style={styles.usageText}>1. Cevaplamak istediğiniz soruyu seçiniz ve sorunun sağ altında bulunan yorum simgesine tıklayınız</Text>
+              <Text style={styles.usageText}>2. Cevap  Metni zorunlu olmak kaydıyla görsel isteğe bağlı olacak şekilde sorunuzu sisteme yükleyin</Text>
+              <Text style={styles.usageText}>3. Ekle butonuna tıklayınız</Text>
+              <Text style={styles.usageText}> - - - - - - - - - - - - - - </Text>
+              <Text style={styles.titleModal}>Soru Filtrelemek</Text>
+              <Text style={styles.usageText}>1. Anasayfada bulunana filtreleme butonuna tıklayınız</Text>
+              <Text style={styles.usageText}>2. Ders ve Konu seçiniz</Text>
+              <Text style={styles.usageText}>3. Filtrele butonuna tıklayınız</Text>
+              <Text style={styles.usageText}> - - - - - - - - - - - - - - </Text>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setUsageModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Kapat</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -213,7 +253,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f0f2f5",
   },
- 
   userInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -224,7 +263,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: -40,
     elevation: 5,
-    marginTop:10
+    marginTop: 10,
   },
   userInfoText: {
     marginLeft: 15,
@@ -280,6 +319,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: 300,
+    maxHeight: '80%',
   },
   modalTitle: {
     fontSize: 20,
@@ -307,10 +347,30 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: "center",
   },
+  closeButton: {
+    backgroundColor: "#FF6347",
+    borderRadius: 20,
+    paddingVertical: 12,
+    alignItems: "center",
+    marginTop: 10,
+  },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  usageText: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+    textAlign: "left",
+  },
+  titleModal: {
+    fontSize: 18,
+    color: "#000",
+    marginBottom: 10,
+    textAlign: "left",
+    fontWeight: "bold",
   },
 });
 
